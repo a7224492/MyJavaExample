@@ -93,4 +93,5 @@ add_executable(linux_0_11
         lib/wait.c
         lib/write.c
         mm/memory.c
-        tools/build.c iam.c kernel/who.c iam.c)
+        tools/build.c
+        process.c)
