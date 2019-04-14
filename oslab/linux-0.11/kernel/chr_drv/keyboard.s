@@ -1,5 +1,5 @@
 # 1 "keyboard2.S"
-# 1 "/mnt/hgfs/vm_share/oslab/linux-0.11/kernel/chr_drv//"
+# 1 "/mnt/hgfs/vm_share/KodgamesTool/oslab/linux-0.11/kernel/chr_drv//"
 # 1 "<built-in>"
 # 1 "<command line>"
 # 1 "keyboard2.S"

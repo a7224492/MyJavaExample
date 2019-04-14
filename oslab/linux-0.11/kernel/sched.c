@@ -17,6 +17,7 @@
 #include <asm/system.h>
 #include <asm/io.h>
 #include <asm/segment.h>
+#include <mydefines.h>
 
 #include <signal.h>
 
@@ -138,7 +139,10 @@ void schedule(void)
 				(*p)->counter = ((*p)->counter >> 1) +
 						(*p)->priority;
 	}
+
+//    RECORD_W(current->pid);
 	switch_to(next);
+//    RECORD_R(current->pid);
 }
 
 int sys_pause(void)

@@ -94,4 +94,4 @@ add_executable(linux_0_11
         lib/write.c
         mm/memory.c
         tools/build.c
-        process.c)
+        process.c kernel/iam.c iam.c include/mydefines.h)
