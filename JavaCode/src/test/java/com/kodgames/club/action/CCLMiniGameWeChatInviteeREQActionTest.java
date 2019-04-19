@@ -67,6 +67,30 @@ public class CCLMiniGameWeChatInviteeREQActionTest {
         testTool.addTestTask(input, expectOut);
     }
 
+    /**
+     * 不能邀请自己
+     */
+    @Test
+    public void testNotInviteSelf() {
+        ActionTestInput input = buildInput();
+        ActionTestExpectOut expectOut = new ActionTestExpectOut();
+
+        ClubProtoBuf.CCLMiniGameWeChatInviteeREQ.Builder req =
+                ClubProtoBuf.CCLMiniGameWeChatInviteeREQ.newBuilder();
+        req.setInviterRoleId(input.getConnection().getRemoteConnectionID());
+        input.setMessage(req.build());
+
+        List<GeneratedMessage> expectMessageList = new ArrayList<>();
+        expectMessageList.add(
+                ClubProtoBuf.CLCMiniGameWeChatInviteeRES.newBuilder()
+                        .setResult(PlatformProtocolsConfig.CLC_MINI_GAME_WECHAT_INVITEE_FAILS_INVITER_SAME_INVITEE)
+                        .build()
+        );
+        expectOut.setExpectMessageList(expectMessageList);
+
+        testTool.addTestTask(input, expectOut);
+    }
+
     @Test
     public void testSuccess() {
         ActionTestInput input = buildInput();
