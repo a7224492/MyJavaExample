@@ -1,7 +1,6 @@
 package com.javacode.testclient.common.task;
 
 import com.google.protobuf.GeneratedMessage;
-import com.javacode.testclient.common.Role;
 
 /**
  * @author jiangzhen
@@ -10,5 +9,5 @@ import com.javacode.testclient.common.Role;
 public interface SequenceTask {
     void start();
 
-    void handleMessage(GeneratedMessage message);
+    void handleMessage(GeneratedMessage generatedMessage);
 }

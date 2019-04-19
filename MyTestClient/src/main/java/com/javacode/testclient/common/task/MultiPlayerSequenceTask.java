@@ -26,17 +26,5 @@ public class MultiPlayerSequenceTask {
             logger.info("No task need handle");
             return;
         }
-
-        boolean roleTaskFinish = currentTask.handleMessage(connection, message);
-        if (roleTaskFinish) {
-            taskQueue.poll();
-            currentTask = taskQueue.peek();
-            if (currentTask == null) {
-                logger.info("No task need handle");
-                return;
-            }
-
-            currentTask.start();
-        }
     }
 }

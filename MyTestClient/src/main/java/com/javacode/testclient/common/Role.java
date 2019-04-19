@@ -1,6 +1,8 @@
 package com.javacode.testclient.common;
 
 import com.google.protobuf.GeneratedMessage;
+import com.javacode.testclient.common.task.SequenceTask;
+import com.javacode.testclient.common.task.SinglePlayerSequenceTask;
 import com.kodgames.corgi.core.net.Connection;
 import com.kodgames.corgi.core.net.handler.AbstractMessageInitializer;
 import com.kodgames.corgi.core.session.ConnectionManager;
@@ -11,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.UUID;
-import java.util.concurrent.Semaphore;
 
 import static com.javacode.testclient.constant.Constants.MINI_WECHAT_SHARE_INVITER;
 import static com.javacode.testclient.constant.Constants.RANDOM_USER;
@@ -50,6 +51,7 @@ public class Role {
     // 请求进入的房间号
     private int requestEnterRoomId = 0;
 
+    private SinglePlayerSequenceTask sequenceTask = new SinglePlayerSequenceTask();
 
     private static boolean replayServerFlag = true;
 
@@ -57,6 +59,45 @@ public class Role {
         interfaceConnection = conn;
 
         this.username = "jztest" + (RANDOM_USER ? UUID.randomUUID().toString() : "") + String.valueOf(interfaceConnection.getConnectionID());
+    }
+
+    public void init() {
+        sequenceTask.addTask(new SequenceTask() {
+            @Override
+            public void start() {
+                sendAuth();
+            }
+
+            @Override
+            public void handleMessage(GeneratedMessage generatedMessage) {
+                AuthProtoBuf.ICAccountAuthRES message = (AuthProtoBuf.ICAccountAuthRES)generatedMessage;
+                roleId = message.getAccountId();
+                username = message.getUsername();
+                nickName = message.getNickname();
+                headImg = message.getHeadImageUrl();
+                sex = message.getSex();
+                channel = message.getChannel();
+                unionId = message.getUnionId();
+                signature = message.getSignature();
+                developerId = message.getDeveloperId();
+                gameServerId = message.getGameServerId();
+                clubServerId = message.getClubServerId();
+
+                interfaceConnection.setRemotePeerID(roleId);
+            }
+        });
+
+        sequenceTask.addTask(new SequenceTask() {
+            @Override
+            public void start() {
+                miniGameLogin();
+            }
+
+            @Override
+            public void handleMessage(GeneratedMessage generatedMessage) {
+
+            }
+        });
     }
 
     public int getRoleId() {
@@ -67,36 +108,8 @@ public class Role {
         return username;
     }
 
-    static  {
-        msgInitializer.setHandler(AuthProtoBuf.ICAccountAuthRES.class, RoleService.class, new CProtobufMessageHandler<AuthProtoBuf.ICAccountAuthRES>() {
-            @Override
-            protected void handleMsg(Connection connection, RoleService roleService, AuthProtoBuf.ICAccountAuthRES message) {
-                Role role = roleService.getRole(connection.getConnectionID());
-                role.roleId = message.getAccountId();
-                role.username = message.getUsername();
-                role.nickName = message.getNickname();
-                role.headImg = message.getHeadImageUrl();
-                role.sex = message.getSex();
-                role.channel = message.getChannel();
-                role.unionId = message.getUnionId();
-                role.signature = message.getSignature();
-                role.developerId = message.getDeveloperId();
-                role.gameServerId = message.getGameServerId();
-                role.clubServerId = message.getClubServerId();
-
-                role.interfaceConnection.setRemotePeerID(role.roleId);
-
-                role.semaphore.release();
-            }
-        });
-
-        msgInitializer.setHandler(GameProtoBuf.GCLoginRES.class, RoleService.class, new CProtobufMessageHandler<GameProtoBuf.GCLoginRES>() {
-            @Override
-            protected void handleMsg(Connection connection, RoleService roleService, GameProtoBuf.GCLoginRES message) {
-                Role role = roleService.getRole(connection.getConnectionID());
-                role.semaphore.release();
-            }
-        });
+    public SinglePlayerSequenceTask getSequenceTask() {
+        return sequenceTask;
     }
 
     public int getConnectionId() {
@@ -145,8 +158,6 @@ public class Role {
     }
 
     public void sendAuth() {
-        semaphore.acquireUninterruptibly();
-
         AuthProtoBuf.CIAccountAuthREQ.Builder builder = AuthProtoBuf.CIAccountAuthREQ.newBuilder();
         builder.setChannel("test");
         builder.setRefreshToken("");
@@ -160,8 +171,6 @@ public class Role {
     }
 
     public void login(){
-        semaphore.acquireUninterruptibly();
-
         GameProtoBuf.CGLoginREQ.Builder builder = GameProtoBuf.CGLoginREQ.newBuilder();
         builder.setAccountId(roleId);
         builder.setArea(areaId);
@@ -180,8 +189,6 @@ public class Role {
     }
 
     public void miniGameLogin() {
-        semaphore.acquireUninterruptibly();
-
         GameProtoBuf.CGLoginREQ.Builder builder = GameProtoBuf.CGLoginREQ.newBuilder();
         builder.setAccountId(roleId);
         builder.setArea(areaId);
@@ -198,9 +205,5 @@ public class Role {
         builder.setMiniGameInviter(MINI_WECHAT_SHARE_INVITER);
 
         sendMessage(builder.build());
-    }
-
-    public void release() {
-        semaphore.release();
     }
 }

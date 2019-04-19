@@ -1,6 +1,7 @@
 package com.javacode.testclient.net;
 
 import com.google.protobuf.GeneratedMessage;
+import com.javacode.testclient.common.CProtobufMessageHandler;
 import com.javacode.testclient.common.Role;
 import com.javacode.testclient.common.RoleService;
 import com.kodgames.corgi.core.net.Connection;
@@ -91,42 +92,17 @@ public class MessageProcessor extends ChannelDuplexHandler {
             if ((remoteNode != null))
                 remoteNode.incRecvAmount();
 
-            BaseMessageHandler<?> handler = messageInitializer.getMessageHandler(protocolID);
-            if (handler == null) {
-                // throw new Exception("Illegal protocolID:" + protocolID + ", Can't find corresponding Protol
-                // Handler.");
-                logger.warn("can not find Protol Handler for protocolID {}", Integer.toHexString(protocolID));
-                return;
-            }
-
-            if (handler instanceof AbstractCustomizeMessageHandler) {
-                Class<?> msgClass = messageInitializer.getMessageClass(protocolID);
-                AbstractCustomizeMessage message = msgClass == null ? null : ((AbstractCustomizeMessage) msgClass.newInstance());
-
-                if (message != null) {
-                    message.decode(buf);
+            Class<?> msgClass = messageInitializer.getMessageClass(protocolID);
+            if (msgClass != null) {
+                Method method = msgClass.getDeclaredMethod("parseFrom", byte[].class);
+                if (method != null) {
+                    Object obj = method.invoke(null, ByteBuf2ByteArray(buf));
+                    corgiMsg.setMessage(obj);
                 } else {
-                    logger.error("channelRead found message null protocolID {}:{}", protocolID, Integer.toHexString(protocolID));
+                    throw new Exception("Illegal protocolID:" + protocolID + ", found class but Can't find parseFrom method.");
                 }
-                corgiMsg.setMessage(message);
-            } else if (handler instanceof AbstractProtobufMessageHandler) {
-                Class<?> msgClass = messageInitializer.getMessageClass(protocolID);
-                if (msgClass != null) {
-                    Method method = msgClass.getDeclaredMethod("parseFrom", byte[].class);
-                    if (method != null) {
-                        Object obj = method.invoke(null, ByteBuf2ByteArray(buf));
-                        corgiMsg.setMessage(obj);
-                    } else {
-                        throw new Exception("Illegal protocolID:" + protocolID + ", found class but Can't find parseFrom method.");
-                    }
-                } else {
-                    throw new Exception("Illegal protocolID:" + protocolID + ", Can't find corresponding Protobuf class.");
-                }
-            } else if (handler instanceof AbstractByteArrayHandler) {
-                // buf.resetReaderIndex();
-                corgiMsg.setMessage(ByteBuf2ByteArray(buf));
             } else {
-                throw new Exception("Illegal MsgHandlerType, Please set correct msg type in MessageInitializer.");
+                throw new Exception("Illegal protocolID:" + protocolID + ", Can't find corresponding Protobuf class.");
             }
 
             logger.debug("read: protocol id is {}:{}, ip address {}, connectionid {} len {} recvAmount {}",
@@ -137,7 +113,7 @@ public class MessageProcessor extends ChannelDuplexHandler {
                     len,
                     remoteNode.getRecvAmount());
 
-            MessageDispatcher.getInstance().dispatchMessage(messageInitializer, corgiMsg);
+            MyMessageDispatcher.getInstance().dispatchMessage(connection, corgiMsg);
         } catch (Throwable e) {
             logger.error("channel " + ctx.channel().remoteAddress() + " read error:", e);
             throw e;

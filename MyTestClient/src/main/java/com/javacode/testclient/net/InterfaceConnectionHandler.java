@@ -22,17 +22,15 @@ public class InterfaceConnectionHandler extends AbstractConnectionHandler
 		logger.info("connection active, connection id {} type {}", connection.getConnectionID(), connection.getConnectionType());
 
 		Role role = new Role(connection);
+		role.init();
+
 		RoleService roleService = ServiceContainer.getInstance().getPublicService(RoleService.class);
 		roleService.addRole(role);
 
 		// 保存Role
 		connection.getRemoteNode().getChannel().attr(Role.ROLEINFO).set(role);
 
-		new Thread(()->{
-			role.sendAuth();
-
-			role.miniGameLogin();
-		}).start();
+		role.getSequenceTask().start();
 	}
 
 	@Override
