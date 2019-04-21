@@ -67,6 +67,7 @@ nr_system_calls = 73
 .globl system_call,sys_fork,timer_interrupt,sys_execve
 .globl hd_interrupt,floppy_interrupt,parallel_interrupt
 .globl device_not_available, coprocessor_error
+.globl switch_to, first_return_from_kernel
 
 .align 2
 bad_sys_call:
@@ -217,6 +218,48 @@ sys_fork:
 	call copy_process
 	addl $20,%esp
 1:	ret
+
+switch_to:
+    pushl %ebp
+    movl %esp,%ebp
+    pushl %ecx
+    pushl %ebx
+    pushl %eax
+    movl 8(%ebp),%ebx
+    cmpl %ebx,current
+    je 1f
+    movl %ebx,%eax
+    xchgl %eax,current
+    movl tss,%ecx
+    addl $4096,%ebx
+    movl %ebx,4(%ecx)
+    movl %esp,16(%eax)
+    movl 8(%ebp),%ebx
+    movl 16(%ebx),%esp
+    movl 12(%ebp),%ecx
+    lldt %cx
+    movl $0x17,%ecx
+    movl %ecx,%fs
+    cmpl %eax,last_task_used_math
+    jne 1f
+    clts
+1:
+    popl %eax
+    popl %ebx
+    popl %ecx
+    popl %ebp
+    ret
+
+first_return_from_kernel:
+    popl %edi
+    popl %esi
+    popl %gs
+    popl %edx
+    pop %fs
+    pop %es
+    pop %ds
+    iret
+
 
 hd_interrupt:
 	pushl %eax

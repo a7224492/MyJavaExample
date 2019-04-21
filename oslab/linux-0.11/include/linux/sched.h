@@ -82,7 +82,8 @@ struct task_struct {
 	long state;	/* -1 unrunnable, 0 runnable, >0 stopped */
 	long counter;
 	long priority;
-	long signal;
+    long signal;
+    long kernelStack;
 	struct sigaction sigaction[32];
 	long blocked;	/* bitmap of masked signals */
 /* various fields */
@@ -114,7 +115,7 @@ struct task_struct {
  */
 #define INIT_TASK \
 /* state etc */	{ 0,15,15, \
-/* signals */	0,{{},},0, \
+/* signals */	0,PAGE_SIZE+(long)&init_task,{{},},0, \
 /* ec,brk... */	0,0,0,0,0,0, \
 /* pid etc.. */	0,-1,0,0,0, \
 /* uid etc */	0,0,0,0,0,0, \
@@ -132,12 +133,13 @@ struct task_struct {
 	 0,0,0x17,0x17,0x17,0x17,0x17,0x17, \
 	 _LDT(0),0x80000000, \
 		{} \
-	}, \
+	} \
 }
 
 extern struct task_struct *task[NR_TASKS];
 extern struct task_struct *last_task_used_math;
 extern struct task_struct *current;
+extern struct tss_struct *tss;
 extern long volatile jiffies;
 extern long startup_time;
 
@@ -170,20 +172,22 @@ __asm__("str %%ax\n\t" \
  * This also clears the TS-flag if the task we switched to has used
  * tha math co-processor latest.
  */
-#define switch_to(n) {\
-struct {long a,b;} __tmp; \
-__asm__("cmpl %%ecx,current\n\t" \
-	"je 1f\n\t" \
-	"movw %%dx,%1\n\t" \
-	"xchgl %%ecx,current\n\t" \
-	"ljmp *%0\n\t" \
-	"cmpl %%ecx,last_task_used_math\n\t" \
-	"jne 1f\n\t" \
-	"clts\n" \
-	"1:" \
-	::"m" (*&__tmp.a),"m" (*&__tmp.b), \
-	"d" (_TSS(n)),"c" ((long) task[n])); \
-}
+
+//#define switch_to(n) {\
+//struct {long a,b;} __tmp; \
+//__asm__("cmpl %%ecx,current\n\t" \
+//	"je 1f\n\t" \
+//	"movw %%dx,%1\n\t" \
+//	"xchgl %%ecx,current\n\t" \
+//	"ljmp *%0\n\t" \
+//	"cmpl %%ecx,last_task_used_math\n\t" \
+//	"jne 1f\n\t" \
+//	"clts\n" \
+//	"1:" \
+//	::"m" (*&__tmp.a),"m" (*&__tmp.b), \
+//	"d" (_TSS(n)),"c" ((long) task[n])); \
+//}
+
 
 #define PAGE_ALIGN(n) (((n)+0xfff)&0xfffff000)
 
