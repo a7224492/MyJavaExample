@@ -1,9 +1,7 @@
 package com.javacode.testclient.net;
 
 import com.google.protobuf.GeneratedMessage;
-import com.javacode.testclient.common.CProtobufMessageHandler;
 import com.javacode.testclient.common.Role;
-import com.javacode.testclient.common.RoleService;
 import com.kodgames.corgi.core.net.Connection;
 import com.kodgames.corgi.core.net.common.NettyNode;
 import com.kodgames.corgi.core.net.handler.AbstractMessageInitializer;
@@ -24,8 +22,6 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
-
-import static com.javacode.testclient.constant.Constants.DEFAULT_MESSAGE_HANDLER;
 
 @Sharable
 public class MessageProcessor extends ChannelDuplexHandler {

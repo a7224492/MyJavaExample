@@ -1,12 +1,11 @@
 package com.javacode.testclient.common;
 
 import com.google.protobuf.GeneratedMessage;
-import com.javacode.testclient.common.task.SequenceTask;
-import com.javacode.testclient.common.task.SinglePlayerSequenceTask;
 import com.kodgames.corgi.core.net.Connection;
 import com.kodgames.corgi.core.net.handler.AbstractMessageInitializer;
 import com.kodgames.corgi.core.session.ConnectionManager;
 import com.kodgames.message.proto.auth.AuthProtoBuf;
+import com.kodgames.message.proto.club.ClubProtoBuf;
 import com.kodgames.message.proto.game.GameProtoBuf;
 import io.netty.util.AttributeKey;
 import org.slf4j.Logger;
@@ -14,7 +13,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.UUID;
 
-import static com.javacode.testclient.constant.Constants.MINI_WECHAT_SHARE_INVITER;
 import static com.javacode.testclient.constant.Constants.RANDOM_USER;
 
 /**
@@ -51,8 +49,6 @@ public class Role {
     // 请求进入的房间号
     private int requestEnterRoomId = 0;
 
-    private SinglePlayerSequenceTask sequenceTask = new SinglePlayerSequenceTask();
-
     private static boolean replayServerFlag = true;
 
     public Role(Connection conn) {
@@ -61,55 +57,12 @@ public class Role {
         this.username = "jztest" + (RANDOM_USER ? UUID.randomUUID().toString() : "") + String.valueOf(interfaceConnection.getConnectionID());
     }
 
-    public void init() {
-        sequenceTask.addTask(new SequenceTask() {
-            @Override
-            public void start() {
-                sendAuth();
-            }
-
-            @Override
-            public void handleMessage(GeneratedMessage generatedMessage) {
-                AuthProtoBuf.ICAccountAuthRES message = (AuthProtoBuf.ICAccountAuthRES)generatedMessage;
-                roleId = message.getAccountId();
-                username = message.getUsername();
-                nickName = message.getNickname();
-                headImg = message.getHeadImageUrl();
-                sex = message.getSex();
-                channel = message.getChannel();
-                unionId = message.getUnionId();
-                signature = message.getSignature();
-                developerId = message.getDeveloperId();
-                gameServerId = message.getGameServerId();
-                clubServerId = message.getClubServerId();
-
-                interfaceConnection.setRemotePeerID(roleId);
-            }
-        });
-
-        sequenceTask.addTask(new SequenceTask() {
-            @Override
-            public void start() {
-                miniGameLogin();
-            }
-
-            @Override
-            public void handleMessage(GeneratedMessage generatedMessage) {
-
-            }
-        });
-    }
-
     public int getRoleId() {
         return roleId;
     }
 
     public String getUsername() {
         return username;
-    }
-
-    public SinglePlayerSequenceTask getSequenceTask() {
-        return sequenceTask;
     }
 
     public int getConnectionId() {
@@ -154,6 +107,7 @@ public class Role {
     }
 
     private void sendMessage(GeneratedMessage message) {
+        logger.info("{}({}) -> {} : {}", interfaceConnection.getConnectionID(), roleId, message.getClass().getSimpleName(), message);
         interfaceConnection.write(RoleService.callbackSeed.getAndIncrement(), message);
     }
 
@@ -188,7 +142,7 @@ public class Role {
         sendMessage(builder.build());
     }
 
-    public void miniGameLogin() {
+    public void miniGameLogin(int inviter) {
         GameProtoBuf.CGLoginREQ.Builder builder = GameProtoBuf.CGLoginREQ.newBuilder();
         builder.setAccountId(roleId);
         builder.setArea(areaId);
@@ -202,7 +156,40 @@ public class Role {
         builder.setUnionId(unionId);
         builder.setDeveloperId(developerId);
         builder.setUsername(username);
-        builder.setMiniGameInviter(MINI_WECHAT_SHARE_INVITER);
+        builder.setMiniGameInviter(inviter);
+
+        sendMessage(builder.build());
+    }
+
+    public void onAuth(GeneratedMessage generatedMessage) {
+        AuthProtoBuf.ICAccountAuthRES message = (AuthProtoBuf.ICAccountAuthRES)generatedMessage;
+        roleId = message.getAccountId();
+        username = message.getUsername();
+        nickName = message.getNickname();
+        headImg = message.getHeadImageUrl();
+        sex = message.getSex();
+        channel = message.getChannel();
+        unionId = message.getUnionId();
+        signature = message.getSignature();
+        developerId = message.getDeveloperId();
+        gameServerId = message.getGameServerId();
+        clubServerId = message.getClubServerId();
+
+        interfaceConnection.setRemotePeerID(roleId);
+    }
+
+    public void miniCreateClub() {
+        ClubProtoBuf.CCLCreateClubREQ.Builder builder = ClubProtoBuf.CCLCreateClubREQ.newBuilder();
+        builder.setChannel("weChatGame");
+        builder.setClubIcon("");
+        builder.setClubName("jzcl12");
+
+        sendMessage(builder.build());
+    }
+
+    public void sendCCLClubMembersREQ(int clubId) {
+        ClubProtoBuf.CCLClubMembersREQ.Builder builder = ClubProtoBuf.CCLClubMembersREQ.newBuilder();
+        builder.setClubId(clubId);
 
         sendMessage(builder.build());
     }

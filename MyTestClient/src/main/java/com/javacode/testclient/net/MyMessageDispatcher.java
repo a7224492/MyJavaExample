@@ -3,16 +3,23 @@ package com.javacode.testclient.net;
 import com.google.protobuf.GeneratedMessage;
 import com.javacode.testclient.common.Role;
 import com.javacode.testclient.common.RoleService;
+import com.javacode.testclient.common.task.RecvTask;
+import com.javacode.testclient.common.task.TestQueue;
+import com.javacode.testclient.common.task.SendTask;
 import com.kodgames.corgi.core.net.Connection;
 import com.kodgames.corgi.core.net.message.InternalMessage;
 import com.kodgames.corgi.core.service.ServiceContainer;
+import com.kodgames.message.proto.auth.AuthProtoBuf;
 import com.kodgames.message.proto.club.ClubProtoBuf;
 import com.kodgames.message.proto.game.GameProtoBuf;
+import com.kodgames.message.protocol.PlatformProtocolsConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import static com.javacode.testclient.constant.Constants.TEST_TASK;
 
 /**
  * @author jiangzhen
@@ -43,9 +50,9 @@ public class MyMessageDispatcher {
 
         Object message = internalMessage.getMessage();
         if (!MASK_MESSAGE_SET.contains(message.getClass())) {
-            logger.info("{} : {} -> {}.", role.getRoleId(), message.getClass().getSimpleName(), message);
+            logger.info("{}({}) : {} -> {}.", connection.getConnectionID(), role.getRoleId(), message.getClass().getSimpleName(), message);
         }
 
-        role.getSequenceTask().handleMessage((GeneratedMessage) internalMessage.getMessage());
+        TestQueue.getInstance().handleMessage(message);
     }
 }
