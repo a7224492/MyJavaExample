@@ -16,9 +16,9 @@
 #include <linux/kernel.h>
 #include <asm/segment.h>
 #include <asm/system.h>
-#include <mydefines.h>
 
 extern void write_verify(unsigned long address);
+extern void first_return_from_kernel();
 
 long last_pid=0;
 
@@ -75,11 +75,11 @@ int copy_process(int nr,long ebp,long edi,long esi,long gs,long none,
 	struct task_struct *p;
 	int i;
 	struct file *f;
+	long *kernelstack;
 
 	p = (struct task_struct *) get_free_page();
 	if (!p)
 		return -EAGAIN;
-	RECORD_N(last_pid);
 
 	task[nr] = p;
 	*p = *current;	/* NOTE! this doesn't copy the supervisor stack */
@@ -96,6 +96,26 @@ int copy_process(int nr,long ebp,long edi,long esi,long gs,long none,
 	p->tss.back_link = 0;
 	p->tss.esp0 = PAGE_SIZE + (long) p;
 	p->tss.ss0 = 0x10;
+    kernelstack = (long *)p->tss.esp0;
+    *(--kernelstack) = ss & 0xffff;
+    *(--kernelstack) = esp;
+    *(--kernelstack) = eflags;
+    *(--kernelstack) = cs & 0xffff;
+    *(--kernelstack) = eip;
+    *(--kernelstack) = ds & 0xffff;
+    *(--kernelstack) = es & 0xffff;
+    *(--kernelstack) = fs & 0xffff;
+    *(--kernelstack) = edx;
+    *(--kernelstack) = gs;
+    *(--kernelstack) = esi;
+    *(--kernelstack) = edi;
+    *(--kernelstack) = (long)first_return_from_kernel;
+    *(--kernelstack) = ebp;
+    *(--kernelstack) = ecx;
+    *(--kernelstack) = ebx;
+    *(--kernelstack) = 0;
+    p->kernelStack = (long)kernelstack;
+
 	p->tss.eip = eip;
 	p->tss.eflags = eflags;
 	p->tss.eax = 0;
@@ -134,7 +154,6 @@ int copy_process(int nr,long ebp,long edi,long esi,long gs,long none,
 	set_ldt_desc(gdt+(nr<<1)+FIRST_LDT_ENTRY,&(p->ldt));
 	p->state = TASK_RUNNING;	/* do this last, just in case */
 
-	RECORD_J(last_pid);
 	return last_pid;
 }
 
