@@ -20,7 +20,7 @@ public class ZdbTool {
         Service.addRunAfterEngineStartTask(() -> {
             latch.countDown();
         });
-        Service.asyncRun(ClassLoader.getSystemResource("zdb_config.xml").getPath());
+//        Service.asyncRun(ClassLoader.getSystemResource("zdb_config.xml").getPath());
         latch.await();
     }
 }
