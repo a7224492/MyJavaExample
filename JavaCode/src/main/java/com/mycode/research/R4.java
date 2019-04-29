@@ -1,8 +1,5 @@
 package com.mycode.research;
 
-import com.kodgames.core.threadPool.OrderedThreadPoolExecutor;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * 模拟消息队列消息堆积过多，内存不断上涨的情况
