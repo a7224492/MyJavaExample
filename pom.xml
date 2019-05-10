@@ -13,11 +13,11 @@
         <module>JavaCode</module>
     </modules>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.kodgames</groupId>
-            <artifactId>BattleServer</artifactId>
-            <version>quanguo-1.1.11</version>
-        </dependency>
-    </dependencies>
+    <!--<dependencies>-->
+        <!--<dependency>-->
+            <!--<groupId>com.kodgames</groupId>-->
+            <!--<artifactId>BattleServer</artifactId>-->
+            <!--<version>quanguo-1.1.11</version>-->
+        <!--</dependency>-->
+    <!--</dependencies>-->
 </project>

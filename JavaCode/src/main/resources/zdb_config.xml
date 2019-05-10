@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ServiceConf name="testLimaxZdb">
+    <!-- ThreadPoolSize nioCpus="1" netProcessors="4" protocolSchedulers="4" applicationExecutors="16"-->
+    <Trace console="true" level="DEBUG" outDir="./trace"
+           rotateHourOfDay="6" rotateMinute="0"/>
+
+    <!-- dbhome="zdb" -->
+    <!-- edbCacheSize="65536" edbLoggerPages="16384" -->
+    <!-- autoKeyInitValue="0" autoKeyStep="4096" -->
+    <!-- dbhome="jdbc:mysql://localhost:3306/game?user=root&amp;password=root"-->
+    <Zdb
+            autoKeyInitValue="0" autoKeyStep="1"
+            checkpointPeriod="1000" deadlockDetectPeriod="1000"
+            corePoolSize="30" procPoolSize="10" schedPoolSize="5" jdbcPoolSize="5"
+            defaultTableCache="limax.zdb.TTableCacheLRU" zdbVerify="true"
+            marshalN="1" marshalPeriod="-1" snapshotFatalTime="200">
+        <Procedure maxExecutionTime="0" retryDelay="100" retryTimes="3" trace="WARN"/>
+    </Zdb>
+</ServiceConf>

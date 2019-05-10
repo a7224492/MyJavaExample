@@ -2,7 +2,6 @@ package com.mycode.research;
 
 import io.netty.util.internal.SystemPropertyUtil;
 
-import java.util.concurrent.Executors;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -13,7 +12,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class R7 {
     private static int value = Math.max(1, SystemPropertyUtil.getInt("cs.corgi.server.corePoolSize", SystemPropertyUtil.getInt("corgi.server.corePoolSize", 8)));
-    private static ThreadPoolExecutor threadPool = new ThreadPoolExecutor(4,8,10, TimeUnit.SECONDS, new SynchronousQueue<>());
+    private static ThreadPoolExecutor threadPool = new ThreadPoolExecutor(2,8,10, TimeUnit.SECONDS, new SynchronousQueue<>());
 
     public static void main(String[] args) throws InterruptedException {
         threadPool.execute(()->{
