@@ -9,8 +9,8 @@
         </encoder>
     </appender>
 
-        <!-- 所有日志输出到文件 -->
-        <appender name="ServerFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <!-- 所有日志输出到文件 -->
+    <appender name="ServerFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>DEBUG</level>
         </filter>
@@ -23,8 +23,8 @@
         </encoder>
     </appender>
 
-        <!-- error日志单独记录到文件 -->
-        <appender name="ServerErrorFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <!-- error日志单独记录到文件 -->
+    <appender name="ServerErrorFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>ERROR</level>
         </filter>
@@ -37,15 +37,15 @@
         </encoder>
     </appender>
 
-        <!-- 全局日志级别, 如需调整请修改这里 -->
-    <root level="WARN">
-                <appender-ref ref="Console"/>
+    <!-- 全局日志级别, 如需调整请修改这里 -->
+    <root level="DEBUG">
+        <appender-ref ref="Console"/>
         <appender-ref ref="ServerFile"/>
         <appender-ref ref="ServerErrorFile"/>
     </root>
 
-        <!-- 如需单独为某些模块指定日志级别, 请在这里添加或修改 -->
-    <logger name="com.kodgames.core.timer.TimerMgr" level="WARN" />
-        <logger name="com.kodgames.core.task.TaskService" level="WARN" />
-        <logger name="com.kodgames.core.event.EventData" level="WARN" />
+    <!-- 如需单独为某些模块指定日志级别, 请在这里添加或修改 -->
+    <logger name="com.kodgames.core.timer.TimerMgr" level="WARN"/>
+    <logger name="com.kodgames.core.task.TaskService" level="WARN"/>
+    <logger name="com.kodgames.core.event.EventData" level="WARN"/>
 </configuration>
