@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>limax.zdb.TTable</OriginalElement>
+  <nodes>
+    <node x="13.500000000000014" y="283.0">limax.zdb.Tables</node>
+    <node x="0.0" y="364.0">limax.zdb.Checkpoint</node>
+    <node x="119.50000000000001" y="283.0">table.Role_info</node>
+    <node x="89.63257575757578" y="202.0">limax.zdb.TTable</node>
+    <node x="8.973484848484873" y="91.0">limax.zdb.TTableCache</node>
+    <node x="95.3598484848485" y="0.0">limax.zdb.TStorage</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="limax.zdb.Tables" target="limax.zdb.TTable">
+      <point x="0.0" y="-15.5" />
+      <point x="56.500000000000014" y="258.0" />
+      <point x="111.38257575757578" y="258.0" />
+      <point x="-21.75" y="15.5" />
+    </edge>
+    <edge source="table.Role_info" target="limax.zdb.TTable">
+      <point x="0.0" y="-15.5" />
+      <point x="170.0" y="258.0" />
+      <point x="154.88257575757578" y="258.0" />
+      <point x="21.75" y="15.5" />
+    </edge>
+    <edge source="limax.zdb.TTable" target="limax.zdb.TTableCache">
+      <point x="-28.999999999999986" y="-15.5" />
+      <point x="104.1325757575758" y="172.0" />
+      <point x="54.72348484848487" y="172.0" />
+      <point x="-15.25" y="15.5" />
+    </edge>
+    <edge source="limax.zdb.TTableCache" target="limax.zdb.TTable">
+      <point x="45.75" y="15.5" />
+      <point x="115.72348484848487" y="152.0" />
+      <point x="123.46590909090912" y="152.0" />
+      <point x="-9.666666666666657" y="-15.5" />
+    </edge>
+    <edge source="limax.zdb.TStorage" target="limax.zdb.TTable">
+      <point x="8.416666666666686" y="15.5" />
+      <point x="154.27651515151518" y="51.0" />
+      <point x="160.80681818181822" y="51.0" />
+      <point x="160.80681818181822" y="162.0" />
+      <point x="152.46590909090912" y="162.0" />
+      <point x="19.333333333333343" y="-15.5" />
+    </edge>
+    <edge source="limax.zdb.Checkpoint" target="limax.zdb.Tables">
+      <point x="-28.25" y="-15.5" />
+      <point x="28.25" y="339.0" />
+      <point x="35.000000000000014" y="339.0" />
+      <point x="-21.5" y="15.5" />
+    </edge>
+    <edge source="limax.zdb.TTableCache" target="limax.zdb.TStorage">
+      <point x="0.0" y="-15.5" />
+      <point x="69.97348484848487" y="71.0" />
+      <point x="103.77651515151518" y="71.0" />
+      <point x="-42.08333333333333" y="15.5" />
+    </edge>
+    <edge source="limax.zdb.TTable" target="limax.zdb.TStorage">
+      <point x="0.0" y="-15.5" />
+      <point x="133.13257575757578" y="142.0" />
+      <point x="141.47348484848487" y="142.0" />
+      <point x="141.47348484848487" y="71.0" />
+      <point x="120.6098484848485" y="71.0" />
+      <point x="-25.25" y="15.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.9000000000000004" x="177.4344718319177" y="230.26315789473682" />
+  <SelectedNodes />
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
