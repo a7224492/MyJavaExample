@@ -1,17 +1,7 @@
 package com.mycode;
 
-import com.alibaba.fastjson.JSONObject;
-import com.kodgames.billingutil.HttpClient;
-import com.kodgames.message.protocol.PlatformProtocolsConfig;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
-
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.IOException;
-
-import static com.mycode.common.constants.Constants._1G;
 
 /**
  * @author jiangzhen

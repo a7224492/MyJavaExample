@@ -1,6 +1,5 @@
 package tool.zdb;
 
-import limax.xmlconfig.Service;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,9 +16,9 @@ public class ZdbTool {
 
     @Test
     public void startZdb() throws InterruptedException {
-        Service.addRunAfterEngineStartTask(() -> {
-            latch.countDown();
-        });
+//        Service.addRunAfterEngineStartTask(() -> {
+//            latch.countDown();
+//        });
 //        Service.asyncRun(ClassLoader.getSystemResource("zdb_config.xml").getPath());
         latch.await();
     }
