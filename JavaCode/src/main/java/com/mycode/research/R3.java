@@ -11,11 +11,10 @@ public class R3 {
     private static final Map map = new HashMap();
     public static void main(String args[]){
         try {
-            Thread.sleep(10000);//给打开visualvm时间
+            Thread.sleep(10000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        //循环添加对象到缓存
         for(int i=0; i<1000000;i++){
             TestMemory t = new TestMemory();
             map.put("key"+i,t);

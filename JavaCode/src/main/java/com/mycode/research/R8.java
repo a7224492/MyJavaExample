@@ -8,8 +8,6 @@ import static com.mycode.common.constants.Constants.createTask_2;
 
 
 /**
- * 一个任务一个线程模型性能
- * 100000个任务进入到线程池，多少时间能处理完?
  *
  * @author jiangzhen
  * @date 2019/4/28 14:29

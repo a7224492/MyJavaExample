@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Class-Path: slf4j-api-1.7.7.jar limax.jar kodtask-2.0.2.jar kodevent-2
+ .0.4.jar kodtimer-2.0.4.jar scheduler-1.2.2.jar kodbilog-2.1.8.1.jar 
+ kodmetrics-1.0.10.jar MessageCore-1.0.2.jar kodhttpclient-2.0.0.jar k
+ odhttpserver-2.0.0.jar kodthreadpool-2.0.7.jar CorgiServerCore-2.2.13
+ .jar BattleCore-quanguo-1.1.15.jar PlatformMessage-quanguo-1.1.16.jar
+  protobuf-java-3.6.1.jar jedis-2.9.0.jar logback-access-1.1.7.jar com
+ mons-pool2-2.4.2.jar logback-classic-1.1.7.jar metrics-core-3.1.0.jar
+  logback-core-1.1.7.jar netty-all-4.0.33.Final.jar
+Main-Class: 
+

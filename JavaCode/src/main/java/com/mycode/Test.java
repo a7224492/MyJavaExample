@@ -72,10 +72,6 @@ public class Test {
     }
 
     /**
-     * 将加密后的字节数组转换成字符串
-     *
-     * @param b 字节数组
-     * @return 字符串
      */
     public  static String byteArrayToHexString(byte[] b) {
         StringBuilder hs = new StringBuilder();
