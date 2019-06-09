@@ -1,9 +1,6 @@
 package com.mycode.common.diy;
 
-import com.kodgames.core.threadPool.task.Task;
-import com.kodgames.metrics.MetricRegistry;
-
-import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -11,37 +8,40 @@ import java.util.concurrent.TimeUnit;
  * @date 2019/5/7 12:42
  */
 public class MyOrderedThreadPoolExecutor extends MyKodThreadPoolExecutor {
-    private MyPoolBossThread boss;
-
-    public MyOrderedThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, String threadGroupName) {
-        super(corePoolSize, maximumPoolSize, keepAliveTime, unit, new SynchronousQueue(), threadGroupName);
-        this.boss = new MyPoolBossThread(this);
-        this.boss.start();
+    public MyOrderedThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, BlockingQueue<Runnable> workQueue, String threadGroupName) {
+//        super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, threadGroupName);
     }
-
-    public MyOrderedThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, String threadGroupName, MetricRegistry registry) {
-        super(corePoolSize, maximumPoolSize, keepAliveTime, unit, new SynchronousQueue(), threadGroupName);
-        this.boss = new MyPoolBossThread(this, registry);
-        this.boss.start();
-    }
-
-    public void execute(Runnable command) {
-        if (command instanceof Task) {
-            this.boss.addTask((Task)command);
-        } else {
-            throw new RuntimeException("OrderedThreadPoolExecutor only execute " + Task.class.getName());
-        }
-    }
-
-    public int getTaskQueueSize(Object key) {
-        return this.boss.getQueueSize(key);
-    }
-
-    public boolean isQueueEmpty(Object key) {
-        return this.boss.isQueueEmpty(key);
-    }
-
-    public int getCacheTaskNum() {
-        return this.boss.getCacheTaskNum();
-    }
+//    private MyPoolBossThread boss;
+//
+//    public MyOrderedThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, String threadGroupName) {
+//        super(corePoolSize, maximumPoolSize, keepAliveTime, unit, new SynchronousQueue(), threadGroupName);
+//        this.boss = new MyPoolBossThread(this);
+//        this.boss.start();
+//    }
+//
+//    public MyOrderedThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, String threadGroupName, MetricRegistry registry) {
+//        super(corePoolSize, maximumPoolSize, keepAliveTime, unit, new SynchronousQueue(), threadGroupName);
+//        this.boss = new MyPoolBossThread(this, registry);
+//        this.boss.start();
+//    }
+//
+//    public void execute(Runnable command) {
+//        if (command instanceof Task) {
+//            this.boss.addTask((Task)command);
+//        } else {
+//            throw new RuntimeException("OrderedThreadPoolExecutor only execute " + Task.class.getName());
+//        }
+//    }
+//
+//    public int getTaskQueueSize(Object key) {
+//        return this.boss.getQueueSize(key);
+//    }
+//
+//    public boolean isQueueEmpty(Object key) {
+//        return this.boss.isQueueEmpty(key);
+//    }
+//
+//    public int getCacheTaskNum() {
+//        return this.boss.getCacheTaskNum();
+//    }
 }

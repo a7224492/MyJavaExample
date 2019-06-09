@@ -23,7 +23,6 @@ public class ActionTestTool {
 //                    input,
 //                    expectOut);
 //
-//            // 开始执行action
 //            Procedure.call(()->{
 //                if (input.getDbInput() != null) {
 //                    input.getDbInput().run();
@@ -34,7 +33,6 @@ public class ActionTestTool {
 //                GeneratedMessage message = input.getMessage();
 //                handler.handleMessage(connection, publicService, message, 0);
 //
-//                // 清理数据，避免影响到其他的测试
 //                if (input.getClearDbInput() != null) {
 //                    input.getClearDbInput().run();
 //                }
@@ -46,7 +44,6 @@ public class ActionTestTool {
 //            List<GeneratedMessage> actualOutMessageList = input.getConnection().getOutMessageList();
 //            assertEquals(expectOut.getExpectMessageList(), actualOutMessageList);
 //
-//            // 判断数据库数据
 //            if (expectOut.getDbComparator() != null) {
 //                expectOut.getDbComparator().run();
 //            }
