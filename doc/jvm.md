@@ -7,3 +7,7 @@
         - instrumentation
         - javaagent
             - agentMain
+            
+            
+##问题
+- ###为什么添加方法的class文件不能重新加载？

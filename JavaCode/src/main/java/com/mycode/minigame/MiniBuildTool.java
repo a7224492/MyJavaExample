@@ -18,7 +18,5 @@ public class MiniBuildTool
 
 		// 修改game.json超时时间
 
-		// res打包
-		new TFile("directory").cp_rp(new TFile("archive.tar.gz"));
 	}
 }
