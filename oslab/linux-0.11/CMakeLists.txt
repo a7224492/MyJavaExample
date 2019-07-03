@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.12)
 project(linux_0_11 C)
 
 set(CMAKE_C_STANDARD 11)
@@ -72,10 +72,12 @@ add_executable(linux_0_11
         kernel/math/math_emulate.c
         kernel/exit.c
         kernel/fork.c
+        kernel/iam.c
         kernel/mktime.c
         kernel/panic.c
         kernel/printk.c
         kernel/sched.c
+        kernel/sem.c
         kernel/signal.c
         kernel/sys.c
         kernel/traps.c
@@ -93,5 +95,9 @@ add_executable(linux_0_11
         lib/wait.c
         lib/write.c
         mm/memory.c
+        mm/shm.c
         tools/build.c
-        process.c kernel/iam.c iam.c include/mydefines.h pc..c filetest.c kernel/sem.c semtest.c)
+        filetest.c
+        pc.c
+        process.c
+        semtest.c)
