@@ -23,7 +23,7 @@ extern char * strerror(int errno);
  *
  *		(C) 1991 Linus Torvalds
  */
-
+ 
 extern inline char * strcpy(char * dest,const char *src)
 {
 __asm__("cld\n"

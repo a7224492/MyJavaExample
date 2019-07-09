@@ -9,4 +9,4 @@ if [ ! -e "$OSLAB_PATH/hdc/umounted" ]; then
     fi
 fi
 
-bochs -q -f ./bochs/bochsrc-gdb.bxrc
+~/bochs/bochs-2.6.9/bochs -q -f ./bochs/bochsrc-gdb.bxrc

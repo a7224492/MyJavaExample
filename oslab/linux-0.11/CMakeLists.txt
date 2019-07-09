@@ -100,4 +100,4 @@ add_executable(linux_0_11
         filetest.c
         pc.c
         process.c
-        semtest.c)
+        semtest.c testa.c testb.c)
