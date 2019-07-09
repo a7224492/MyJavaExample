@@ -185,6 +185,25 @@ public class TestTask {
 
                     }
                 });
+                testQueue.addTask(new SendTask() {
+                    @Override
+                    public void run() {
+                        inviterRole.miniCreateClub();
+                    }
+                });
+                testQueue.addTask(new RecvTask() {
+                    @Override
+                    public Class<?> getTestMessageClazz() {
+                        return ClubProtoBuf.CLCCreateClubRES.class;
+                    }
+
+                    @Override
+                    public void handle(GeneratedMessage message) {
+                        ClubProtoBuf.CLCCreateClubRES res = (ClubProtoBuf.CLCCreateClubRES)message;
+                        assertTrue(res.getResult() == PlatformProtocolsConfig.CLC_CREATE_CLUB_SUCCESS);
+                        assertTrue(res.getClubId() != 0);
+                    }
+                });
                 break;
         }
     }

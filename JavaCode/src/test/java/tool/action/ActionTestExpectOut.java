@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 测试的期望输出
  *
  * @author jiangzhen
  * @date 2019/4/11 18:04
@@ -18,7 +17,6 @@ public class ActionTestExpectOut {
     private List<GeneratedMessage> expectMessageList = new ArrayList<>();
 
     /**
-     * 持久化数据期望输出
      */
     private Runnable dbComparator;
 

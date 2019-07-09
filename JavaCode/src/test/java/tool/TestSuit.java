@@ -1,6 +1,5 @@
 package tool;
 
-import com.kodgames.club.action.CCLMiniGameWeChatInviteeREQActionTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import tool.zdb.ZdbTool;
@@ -12,7 +11,6 @@ import tool.zdb.ZdbTool;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        CCLMiniGameWeChatInviteeREQActionTest.class,
         ZdbTool.class
 })
 public class TestSuit {
