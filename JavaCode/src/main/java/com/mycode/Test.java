@@ -13,12 +13,10 @@ public class Test {
 
     public static void main(String[] args) throws InterruptedException {
         Map<String, Integer> m = new HashMap<>();
-
-        try {
-            m.put(null, 25);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        m.put("jiangzhen", 25);
+        m.put("chuangwang", 25);
+        m.put("shafuzi", 26);
+        m.entrySet();
     }
 
     public static String sig(String openId, String ts)
