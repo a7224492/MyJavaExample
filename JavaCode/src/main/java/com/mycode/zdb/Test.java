@@ -5,7 +5,13 @@ package com.mycode.zdb;
  * @date 2019/5/10 13:46
  */
 public class Test {
-//    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
+    	int x = 10;
+    	if (x < 10)
+    		if (x < 5)
+    			System.out.println(x);
+    		else
+    			System.out.println(11);
 //        Service.addRunAfterEngineStartTask(() -> {
 //            try
 //            {
@@ -37,5 +43,5 @@ public class Test {
 //        });
 //
 //        Service.run(Object.class.getResource("/zdb_config.xml").getPath());
-//    }
+    }
 }

@@ -1,0 +1,2 @@
+file java
+handle SIGSEGV nostop noprint pass
