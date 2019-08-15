@@ -16,7 +16,7 @@ import java.security.ProtectionDomain;
  */
 public class AgentTest
 {
-	private static final String TARGET_CLASS_NAME = "com/mycode/research/jvm/TestMethod";
+	private static final String TARGET_CLASS_NAME = "com/mycode/research/jvm/TestMain";
 
 	public static void premain(String agentArgs, Instrumentation inst) {
 		System.out.println("--------premain------------");
@@ -31,7 +31,7 @@ public class AgentTest
 					return null;
 				}
 
-				System.out.println("Start transform TestMethod.class");
+				System.out.println("Start transform TestMain.class");
 				return getBytesFromFile(TARGET_CLASS_NAME);
 			}
 		}, true);

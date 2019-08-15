@@ -6,7 +6,7 @@ package com.mycode.research.jvm;
  */
 public class TestMethod {
     static {
-        System.out.println("TestMethod");
+        System.out.println("TestMain");
     }
 
     public static int addNumber(int x) {

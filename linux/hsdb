@@ -1,2 +1,0 @@
-#!/bin/sh
-sudo $JAVA_HOME/bin/java -cp $JAVA_HOME/../images/lib/rt.jar:$JAVA_HOME/lib/sa-jdi.jar sun.jvm.hotspot.HSDB

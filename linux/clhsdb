@@ -1,2 +1,0 @@
-#!/bin/sh
-sudo $JAVA_HOME/bin/java -cp /home/jz/openjdk/openjdk-jdk8u-jdk8u/build/linux-x86_64-normal-server-slowdebug/images/lib/rt.jar:$JAVA_HOME/lib/sa-jdi.jar sun.jvm.hotspot.CLHSDB
