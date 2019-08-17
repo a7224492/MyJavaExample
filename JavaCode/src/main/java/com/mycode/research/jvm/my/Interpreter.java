@@ -34,11 +34,11 @@ public class Interpreter {
                 index = operand[0] << 8 | operand[1];
                 JMethod method = currentFrame.getCurrentMethod().getConstantPool().getMethod(index);
 
-                List<Object> paramList = new ArrayList<>();
+                List<Object> paramList = new ArrayList<>(method.getParam().length());
                 for (int i = method.getParam().length() - 1; i >= 0; --i) {
                     // 倒序遍历的原因是为了保证参数的传入顺序和被调用方法的参数顺序保持一致
                     Object param = currentFrame.getOperandStack().pop();
-                    paramList.add(param);
+                    paramList.add(0, param);
                 }
                 callMethod(method, paramList);
                 break;
@@ -97,8 +97,15 @@ public class Interpreter {
                 break;
             case IRETURN:
             case RETURN:
+                LinkedList<Object> operandStack = currentFrame.getOperandStack();
+
                 frameList.pop();
                 currentFrame = frameList.peek();
+
+                while (!operandStack.isEmpty()) {
+                    currentFrame.getOperandStack().push(operandStack.pop());
+                }
+
                 break;
             default:
                 System.err.println("Can't find instruction!");
