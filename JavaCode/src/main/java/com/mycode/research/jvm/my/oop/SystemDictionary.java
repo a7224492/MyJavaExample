@@ -14,14 +14,8 @@ public class SystemDictionary {
         klassDictionary.put(name, klass);
     }
 
-    public static JKlass getKlass(String name) throws ClassNotFoundException {
+    public static JKlass getKlass(String name) {
         JKlass klass = klassDictionary.get(name);
-        if (klass == null) {
-            // 查找的类不存在，尝试加载这个类
-            String tmpName = name.replace("/", ".");
-            Class<?> clazz = Class.forName(tmpName);
-            System.out.println();
-        }
 
         return klass;
     }

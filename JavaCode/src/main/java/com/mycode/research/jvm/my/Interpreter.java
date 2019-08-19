@@ -2,7 +2,12 @@ package com.mycode.research.jvm.my;
 
 import com.mycode.research.jvm.my.code.Code;
 import com.mycode.research.jvm.my.code.InterpreterCode;
+import com.mycode.research.jvm.my.oop.JKlass;
 import com.mycode.research.jvm.my.oop.JMethod;
+import com.mycode.research.jvm.my.oop.SystemDictionary;
+import com.mycode.research.jvm.my.oop.constant.JConstantPool;
+import com.mycode.research.jvm.my.oop.constant.MethodRef;
+import com.mycode.research.jvm.my.oop.constant.NameAndType;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -32,22 +37,41 @@ public class Interpreter {
             case INVOKESTATIC:
                 byte[] operand = interpreterCode.getOperand();
                 index = operand[0] << 8 | operand[1];
-                JMethod method = currentFrame.getCurrentMethod().getConstantPool().getMethod(index);
+                JConstantPool constantPool = currentFrame.getCurrentMethod().getConstantPool();
 
-                List<Object> paramList = new ArrayList<>(method.getParam().length());
-                for (int i = method.getParam().length() - 1; i >= 0; --i) {
-                    // 倒序遍历的原因是为了保证参数的传入顺序和被调用方法的参数顺序保持一致
-                    Object param = currentFrame.getOperandStack().pop();
-                    paramList.add(0, param);
+                // 1. 得到方法
+                MethodRef methodRef = (MethodRef) constantPool.getConstantPoolEntry(index);
+                short classNameIndex = (short) constantPool.getConstantPoolEntry(methodRef.getClassIndex());
+                String className = (String) constantPool.getConstantPoolEntry(classNameIndex);
+
+                NameAndType nameAndType = (NameAndType) constantPool.getConstantPoolEntry(methodRef.getNameAndTypeIndex());
+                String methodName = (String) constantPool.getConstantPoolEntry(nameAndType.getNameIndex());
+                if (className.equals("java/io/PrintStream") && methodName.equals("println")) {
+                    // 目前暂不处理这些jdk里面的方法，如果遇到，直接调用
+                    String param = String.valueOf(currentFrame.getOperandStack().pop());
+                    System.out.println(param);
+                } else {
+                    JKlass klass = SystemDictionary.getKlass(className);
+                    if (klass == null) {
+                        throw new IllegalStateException("Can't find klass by name");
+                    }
+
+                    JMethod method = klass.findMethod(methodName);
+
+                    // 2. 得到参数
+                    List<Object> paramList = new ArrayList<>(method.getParam().length());
+                    for (int i = method.getParam().length() - 1; i >= 0; --i) {
+                        // 倒序遍历的原因是为了保证参数的传入顺序和被调用方法的参数顺序保持一致
+                        Object param = currentFrame.getOperandStack().pop();
+                        paramList.add(0, param);
+                    }
+
+                    // 3. 调用方法
+                    callMethod(method, paramList);
                 }
-                callMethod(method, paramList);
+
                 break;
             case GETSTATIC:
-//                operand = interpreterCode.getOperand();
-//                index = operand[0] << 8 | operand[1];
-//                JField field = currentFrame.getCurrentMethod().getConstantPool().getField(index);
-//                currentFrame.getOperandStack().push(field);
-
                 break;
             case BIPUSH:
                 currentFrame.getOperandStack().push(interpreterCode.getOperand()[0]);
