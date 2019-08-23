@@ -5,11 +5,11 @@ package com.mycode.research.jvm.my.code;
  */
 public class InterpreterCode {
 	private Code code;
-	private byte[] operand;
+	private byte[] operands;
 
 	public InterpreterCode(Code code, byte[] operand) {
 		this.code = code;
-		this.operand = operand;
+		this.operands = operand;
 	}
 
 	public Code getCode()
@@ -22,13 +22,22 @@ public class InterpreterCode {
 		this.code = code;
 	}
 
-	public byte[] getOperand()
+	public byte[] getOperands()
 	{
-		return operand;
+		return operands;
 	}
 
-	public void setOperand(byte[] operand)
+	public void setOperands(byte[] operands)
 	{
-		this.operand = operand;
+		this.operands = operands;
+	}
+
+	public int parseOperand() {
+		int result = 0;
+		for (int i = 0; i < operands.length; ++i) {
+			result = (result << 8) | operands[i];
+		}
+
+		return 0;
 	}
 }

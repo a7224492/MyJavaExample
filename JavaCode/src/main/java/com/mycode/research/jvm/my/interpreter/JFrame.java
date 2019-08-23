@@ -1,4 +1,4 @@
-package com.mycode.research.jvm.my;
+package com.mycode.research.jvm.my.interpreter;
 
 import com.mycode.research.jvm.my.oop.JMethod;
 

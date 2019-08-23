@@ -49,4 +49,26 @@ public class JKlass {
 
         return null;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        JKlass klass = (JKlass) o;
+
+        if (fieldList != null ? !fieldList.equals(klass.fieldList) : klass.fieldList != null) return false;
+        if (methodList != null ? !methodList.equals(klass.methodList) : klass.methodList != null) return false;
+        if (constantPool != null ? !constantPool.equals(klass.constantPool) : klass.constantPool != null) return false;
+        return name != null ? name.equals(klass.name) : klass.name == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = fieldList != null ? fieldList.hashCode() : 0;
+        result = 31 * result + (methodList != null ? methodList.hashCode() : 0);
+        result = 31 * result + (constantPool != null ? constantPool.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        return result;
+    }
 }
