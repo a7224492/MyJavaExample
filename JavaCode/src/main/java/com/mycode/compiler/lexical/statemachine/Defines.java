@@ -14,4 +14,12 @@ public class Defines
 		IF,
 		ELSE,
 	}
+
+	public static boolean isLetter(byte ch) {
+		return (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || ch == '_';
+	}
+
+	public static boolean isNumber(byte ch) {
+		return (ch >= '0' && ch <= '9');
+	}
 }

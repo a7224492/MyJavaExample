@@ -40,7 +40,7 @@ public class Constants {
                 e.printStackTrace();
             }
 
-            logger.debug("id = {} finish", id.getAndIncrement());
+            logger.debug("id = {} fail", id.getAndIncrement());
         }
     }
 

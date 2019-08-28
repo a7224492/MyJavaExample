@@ -18,7 +18,7 @@ public class LexicalAnalyzerTest
 
 		Token token = lexicalAnalyzer.parseToken();
 		assertEquals(TokenType.ID, token.getType());
-		assertEquals(test, token.getName());
+		assertEquals(test, token.buildName());
 	}
 
 	@Test
@@ -27,25 +27,25 @@ public class LexicalAnalyzerTest
 		lexicalAnalyzer.init(new ByteArrayInputStream(test.getBytes()));
 		Token token = lexicalAnalyzer.parseToken();
 		assertEquals(TokenType.ID, token.getType());
-		assertEquals("int", token.getName());
+		assertEquals("int", token.buildName());
 		token = lexicalAnalyzer.parseToken();
 		assertEquals(TokenType.WHITE, token.getType());
-		assertEquals(" ", token.getName());
+		assertEquals(" ", token.buildName());
 		token = lexicalAnalyzer.parseToken();
 		assertEquals(TokenType.ID, token.getType());
-		assertEquals("x", token.getName());
+		assertEquals("x", token.buildName());
 		token = lexicalAnalyzer.parseToken();
 		assertEquals(TokenType.WHITE, token.getType());
-		assertEquals(" ", token.getName());
+		assertEquals(" ", token.buildName());
 		token = lexicalAnalyzer.parseToken();
 		assertEquals(TokenType.RELOP, token.getType());
-		assertEquals("=", token.getName());
+		assertEquals("=", token.buildName());
 		token = lexicalAnalyzer.parseToken();
 		assertEquals(TokenType.WHITE, token.getType());
-		assertEquals(" ", token.getName());
+		assertEquals(" ", token.buildName());
 		token = lexicalAnalyzer.parseToken();
 		assertEquals(TokenType.DIGIT, token.getType());
-		assertEquals("100", token.getName());
+		assertEquals("100", token.buildName());
 	}
 
 	@Test
@@ -54,48 +54,48 @@ public class LexicalAnalyzerTest
 		lexicalAnalyzer.init(new ByteArrayInputStream(test.getBytes()));
 		Token token = lexicalAnalyzer.parseToken();
 		assertEquals(TokenType.IF, token.getType());
-		assertEquals("if", token.getName());
+		assertEquals("if", token.buildName());
 		token = lexicalAnalyzer.parseToken();
 		assertEquals(TokenType.WHITE, token.getType());
-		assertEquals(" ", token.getName());
+		assertEquals(" ", token.buildName());
 		token = lexicalAnalyzer.parseToken();
 		assertEquals(TokenType.ID, token.getType());
-		assertEquals("x", token.getName());
+		assertEquals("x", token.buildName());
 		token = lexicalAnalyzer.parseToken();
 		assertEquals(TokenType.WHITE, token.getType());
-		assertEquals(" ", token.getName());
+		assertEquals(" ", token.buildName());
 		token = lexicalAnalyzer.parseToken();
 		assertEquals(TokenType.RELOP, token.getType());
-		assertEquals(">", token.getName());
+		assertEquals(">", token.buildName());
 		token = lexicalAnalyzer.parseToken();
 		assertEquals(TokenType.WHITE, token.getType());
-		assertEquals(" ", token.getName());
+		assertEquals(" ", token.buildName());
 		token = lexicalAnalyzer.parseToken();
 		assertEquals(TokenType.DIGIT, token.getType());
-		assertEquals("10", token.getName());
+		assertEquals("10", token.buildName());
 		token = lexicalAnalyzer.parseToken();
 		assertEquals(TokenType.WHITE, token.getType());
-		assertEquals(" ", token.getName());
+		assertEquals(" ", token.buildName());
 		token = lexicalAnalyzer.parseToken();
 		assertEquals(TokenType.ID, token.getType());
-		assertEquals("x", token.getName());
+		assertEquals("x", token.buildName());
 		token = lexicalAnalyzer.parseToken();
 		assertEquals(TokenType.WHITE, token.getType());
-		assertEquals(" ", token.getName());
+		assertEquals(" ", token.buildName());
 		token = lexicalAnalyzer.parseToken();
 		assertEquals(TokenType.RELOP, token.getType());
-		assertEquals("=", token.getName());
+		assertEquals("=", token.buildName());
 		token = lexicalAnalyzer.parseToken();
 		assertEquals(TokenType.WHITE, token.getType());
-		assertEquals(" ", token.getName());
+		assertEquals(" ", token.buildName());
 		token = lexicalAnalyzer.parseToken();
 		assertEquals(TokenType.DIGIT, token.getType());
-		assertEquals("15", token.getName());
+		assertEquals("15", token.buildName());
 		token = lexicalAnalyzer.parseToken();
 		assertEquals(TokenType.WHITE, token.getType());
-		assertEquals(" ", token.getName());
+		assertEquals(" ", token.buildName());
 		token = lexicalAnalyzer.parseToken();
 		assertEquals(TokenType.ELSE, token.getType());
-		assertEquals("else", token.getName());
+		assertEquals("else", token.buildName());
 	}
 }

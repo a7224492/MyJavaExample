@@ -17,25 +17,33 @@ public class Token
 	/**
 	 * 词法单元名
 	 */
-	private String name;
+	private StringBuilder name = new StringBuilder();
 
 	/**
 	 * 词法单元属性值在符号表中的下标
 	 */
 	private int index;
 
-	public Token(Defines.TokenType type, String name, int index) {
+	public Token(Defines.TokenType type, StringBuilder name, int index) {
 		this.type = type;
 		this.name = name;
 		this.index = index;
 	}
 
-	public String getName()
+	public Token(Defines.TokenType type) {
+		this.type = type;
+	}
+
+	public StringBuilder getName()
 	{
 		return name;
 	}
 
-	public void setName(String name)
+	public String buildName() {
+		return name.toString();
+	}
+
+	public void setName(StringBuilder name)
 	{
 		this.name = name;
 	}
@@ -58,5 +66,9 @@ public class Token
 	public void setType(Defines.TokenType type)
 	{
 		this.type = type;
+	}
+
+	public void reset() {
+		name = new StringBuilder();
 	}
 }

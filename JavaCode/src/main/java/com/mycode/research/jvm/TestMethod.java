@@ -17,7 +17,7 @@ public class TestMethod {
     {
         switch (line)
         {
-            case "finish":
+            case "fail":
                 return true;
             case "name":
                 System.out.println("jiangzhen");
