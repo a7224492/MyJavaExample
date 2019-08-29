@@ -22,7 +22,7 @@ public class MyTransform {
      *     -> n2 ->
      *     ε     ε
      */
-    public NFA NFAOrNFA(NFA n1, NFA n2) {
+    public static NFA NFAOrNFA(NFA n1, NFA n2) {
         NFA nfa = new NFA(1 + n1.getStateCount() + n2.getStateCount() + 1);
 
         // 构造起点movetable
@@ -42,7 +42,35 @@ public class MyTransform {
         return nfa;
     }
 
-    private void addNFA(NFA src, NFA tar, int inc) {
+    /**
+     * 具体算法请参考龙书第二版3.7.4
+     * -> n1 -> n2 ->
+     */
+    public static NFA NFAUnionNFA(NFA n1, NFA n2) {
+        NFA nfa = new NFA(n1.getStateCount() + n2.getStateCount());
+        addNFA(nfa, n1, 0);
+        addNFA(nfa, n2, n1.getStateCount());
+        return nfa;
+    }
+
+    /**
+     * 具体算法请参考龙书第二版3.7.4
+     */
+    public static NFA NFAStar(NFA n) {
+        NFA nfa = new NFA(1 + n.getStateCount() + 1);
+
+        nfa.addMoveTableEntry(0, "ε", 1);
+        nfa.addMoveTableEntry(0, "ε", nfa.getStateCount() - 1);
+
+        addNFA(nfa, n, 1);
+
+        nfa.addMoveTableEntry(n.getStateCount(), "ε", 1);
+        nfa.addMoveTableEntry(n.getStateCount(), "ε", nfa.getStateCount() - 1);
+
+        return nfa;
+    }
+
+    private static void addNFA(NFA src, NFA tar, int inc) {
         for (int i = 0; i < tar.getStateCount(); ++i) {
             // 更新状态
             int newState = inc + i;
@@ -60,7 +88,7 @@ public class MyTransform {
         }
     }
 
-    private Map<String, List<Integer>> updateMoveTable(Map<String, List<Integer>> moveTable, int inc) {
+    private static Map<String, List<Integer>> updateMoveTable(Map<String, List<Integer>> moveTable, int inc) {
         Map<String, List<Integer>> result = new HashMap<>();
 
         for (Map.Entry<String, List<Integer>> entry : moveTable.entrySet()) {

@@ -7,6 +7,11 @@ import java.util.*;
  * @date 2019/8/29 12:49
  */
 public class NFA {
+    /**
+     * 保存自动机的所有状态
+     * 这里使用的自动机都只有一个开始状态和一个接受状态
+     * 第一个状态是开始状态，最后一个状态时接受状态
+     */
     private List<Map<String, List<Integer>>> stateList = new ArrayList<>();
 
     public NFA(int stateCount) {
