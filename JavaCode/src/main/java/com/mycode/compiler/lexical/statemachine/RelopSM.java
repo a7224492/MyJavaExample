@@ -15,7 +15,7 @@ public class RelopSM extends StateMachine
 
 	@Override
 	public boolean accept() {
-		return state == 6;
+		return state == 7;
 	}
 
 	@Override
@@ -40,13 +40,15 @@ public class RelopSM extends StateMachine
 					case '>':
 						return 5;
 					default:
-						return 6;
+						return 7;
 				}
 			case 2:
+			    return ch == '=' ? 6 : -1;
 			case 3:
 			case 4:
 			case 5:
-				return 6;
+            case 6:
+				return 7;
 			default:
 				return -1;
 		}

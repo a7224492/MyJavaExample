@@ -7,15 +7,15 @@ import com.mycode.compiler.lexical.Token;
  *
  * @author jiangzhen
  */
-public class ElseSM extends StateMachine
+public class WhileSM extends StateMachine
 {
-	public ElseSM() {
+	public WhileSM() {
 		super(new Token(Defines.TokenType.ELSE));
 	}
 
 	@Override
 	public boolean accept() {
-		return state == 5;
+		return state == 6;
 	}
 
 	@Override
@@ -23,15 +23,17 @@ public class ElseSM extends StateMachine
 	{
 		switch (state) {
 			case 0:
-				return ch == 'e' ? 1 : -1;
+				return ch == 'w' ? 1 : -1;
 			case 1:
-				return ch == 'l' ? 2 : -1;
+				return ch == 'h' ? 2 : -1;
 			case 2:
-				return ch == 's' ? 3 : -1;
+				return ch == 'i' ? 3 : -1;
 			case 3:
-				return ch == 'e' ? 4 : -1;
+				return ch == 'l' ? 4 : -1;
 			case 4:
-				return 5;
+				return ch == 'e' ? 5 : -1;
+			case 5:
+				return 6;
 			default:
 				return -1;
 		}

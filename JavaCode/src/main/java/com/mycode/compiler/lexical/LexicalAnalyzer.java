@@ -59,7 +59,7 @@ public class LexicalAnalyzer {
      * 定义过的状态机
      */
     private StateMachine[] stateMachines = {
-            new IfSM(), new ElseSM(), new IdSM(), new RelopSM(),
+            new IfSM(), new WhileSM(), new IdSM(), new RelopSM(),
             new WhiteSM(), new DigitSM()
     };
 

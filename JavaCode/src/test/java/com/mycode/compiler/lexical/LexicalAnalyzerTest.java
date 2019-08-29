@@ -50,7 +50,7 @@ public class LexicalAnalyzerTest
 
 	@Test
 	public void parseToken3() throws IOException {
-		String test = "if x > 10 x = 15 else x = 5";
+		String test = "if x == 10 x = 15";
 		lexicalAnalyzer.init(new ByteArrayInputStream(test.getBytes()));
 		Token token = lexicalAnalyzer.parseToken();
 		assertEquals(TokenType.IF, token.getType());
@@ -66,7 +66,7 @@ public class LexicalAnalyzerTest
 		assertEquals(" ", token.buildName());
 		token = lexicalAnalyzer.parseToken();
 		assertEquals(TokenType.RELOP, token.getType());
-		assertEquals(">", token.buildName());
+		assertEquals("==", token.buildName());
 		token = lexicalAnalyzer.parseToken();
 		assertEquals(TokenType.WHITE, token.getType());
 		assertEquals(" ", token.buildName());
@@ -91,11 +91,5 @@ public class LexicalAnalyzerTest
 		token = lexicalAnalyzer.parseToken();
 		assertEquals(TokenType.DIGIT, token.getType());
 		assertEquals("15", token.buildName());
-		token = lexicalAnalyzer.parseToken();
-		assertEquals(TokenType.WHITE, token.getType());
-		assertEquals(" ", token.buildName());
-		token = lexicalAnalyzer.parseToken();
-		assertEquals(TokenType.ELSE, token.getType());
-		assertEquals("else", token.buildName());
 	}
 }
