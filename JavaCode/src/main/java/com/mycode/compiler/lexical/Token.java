@@ -1,6 +1,6 @@
 package com.mycode.compiler.lexical;
 
-import com.mycode.compiler.lexical.statemachine.Defines;
+import com.mycode.compiler.Defines;
 
 /**
  * 词法单元

@@ -1,6 +1,6 @@
 package com.mycode.compiler.lexical;
 
-import com.mycode.compiler.lexical.statemachine.Defines.TokenType;
+import com.mycode.compiler.Defines.TokenType;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import org.junit.Test;

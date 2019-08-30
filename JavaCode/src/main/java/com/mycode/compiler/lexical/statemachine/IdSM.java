@@ -1,9 +1,10 @@
 package com.mycode.compiler.lexical.statemachine;
 
+import com.mycode.compiler.Defines;
 import com.mycode.compiler.lexical.Token;
 
-import static com.mycode.compiler.lexical.statemachine.Defines.isLetter;
-import static com.mycode.compiler.lexical.statemachine.Defines.isNumber;
+import static com.mycode.compiler.Defines.isLetter;
+import static com.mycode.compiler.Defines.isNumber;
 
 /**
  * identifier

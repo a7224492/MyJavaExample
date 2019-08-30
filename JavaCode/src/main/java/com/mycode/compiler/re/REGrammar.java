@@ -11,7 +11,7 @@ public class REGrammar {
      * 正则表达式文法(左递归)
      */
     private final static String[] re = {
-            "exp -> exp|exp | exp* | (exp) | id", //  id就是一个字母集构成的字符串
+            "Exp -> Exp|Exp | Exp* | (Exp) | ΣExp| ε", //  Σ就是字母集中的一个字母
     };
 
     /*
@@ -19,15 +19,17 @@ public class REGrammar {
         α1 = |exp
         α2 = *
         β1 = (exp)
-        β2 = Σ
+        β2 = ΣExp
+        β3 = ε
      */
 
     /**
      * 消除左递归后的re文法
      * (abc)|(dfe)
+     * a|b(c|d)
      */
     private final static String[] re2 = {
-            "exp -> (exp)R   |  idR       ",
-            "R   -> |expR    |  *R  |  ε "
+            "exp -> (exp)R   |  ΣExpR  |   ε      ",
+            "R   -> |expR    |  *R     |  ε "
     };
 }

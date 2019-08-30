@@ -1,4 +1,4 @@
-package com.mycode.compiler.lexical.statemachine;
+package com.mycode.compiler;
 
 /**
  * @author jiangzhen
