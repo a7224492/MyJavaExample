@@ -56,7 +56,7 @@ public class MyTransformTest {
         NFA n1 = NFA.build(nfa1);
         NFA n2 = NFA.build(nfa2);
 
-        NFA nfa = MyTransform.NFAOrNFA(n1, n2);
+        NFA nfa = NFATransform.NFAOrNFA(n1, n2);
         assertTrue(nfa.moveToNextState(0, "ε").contains(1));
         assertTrue(nfa.moveToNextState(0, "ε").contains(4));
         assertTrue(nfa.moveToNextState(1, "a").contains(2));
@@ -94,7 +94,7 @@ public class MyTransformTest {
         NFA n1 = NFA.build(nfa1);
         NFA n2 = NFA.build(nfa2);
 
-        NFA nfa = MyTransform.NFAUnionNFA(n1, n2);
+        NFA nfa = NFATransform.NFAUnionNFA(n1, n2);
         assertTrue(nfa.moveToNextState(0, "a").contains(1));
         assertTrue(nfa.moveToNextState(1, "a").contains(0));
         assertTrue(nfa.moveToNextState(2, "e").contains(0));
@@ -123,7 +123,7 @@ public class MyTransformTest {
 
         NFA n1 = NFA.build(nfa1);
 
-        NFA nfa = MyTransform.NFAStar(n1);
+        NFA nfa = NFATransform.NFAStar(n1);
         assertTrue(nfa.moveToNextState(0, "ε").contains(1));
         assertTrue(nfa.moveToNextState(0, "ε").contains(5));
         assertTrue(nfa.moveToNextState(2, "a").contains(1));

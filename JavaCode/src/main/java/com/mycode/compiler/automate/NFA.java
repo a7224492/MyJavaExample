@@ -19,6 +19,8 @@ public class NFA {
 
     public static final String EMPTY_INPUT = "ε";
 
+    public static final NFA EMPTY_NFA = new NFA(0);
+
     /**
      * 保存自动机的所有状态
      *
@@ -73,6 +75,14 @@ public class NFA {
         }
 
         return n;
+    }
+
+    public static NFA build(char ch) {
+        NFA nfa = new NFA(3);
+        nfa.addMoveTableEntry( 0, String.valueOf(ch), 1);
+        nfa.addMoveTableEntry(1, ANY_INPUT, 2);
+
+        return nfa;
     }
 
     /**
@@ -164,5 +174,15 @@ public class NFA {
         Map<String, Set<Integer>> moveTable = stateList.get(state);
         moveTable.remove(ANY_INPUT);
         moveTable.remove(OTHER_INPUT);
+    }
+
+    public Set<Integer> getEmptyClosure(int i) {
+        // TODO
+        return null;
+    }
+
+    public Map<String, Set<Integer>> moveToNextStateSet(Set<Integer> currentStateSet) {
+        // TODO
+        return null;
     }
 }

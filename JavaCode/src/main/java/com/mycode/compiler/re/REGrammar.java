@@ -29,7 +29,7 @@ public class REGrammar {
      * a|b(c|d)
      */
     private final static String[] re2 = {
-            "exp -> (exp)R   |  ΣExpR  |   ε      ",
-            "R   -> |expR    |  *R     |  ε "
+            "Exp -> (Exp)R   |  ΣExpR  |   ε      ",
+            "R   -> |ExpR    |  *R     |  ε "
     };
 }

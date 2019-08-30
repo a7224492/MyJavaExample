@@ -7,17 +7,7 @@ import java.util.Set;
  * @author jiangzhen
  * @date 2019/8/29 11:45
  */
-public class MyTransform {
-    public NFA re2NFA(String re) {
-        for (int i = 0; i < re.length(); ++i) {
-            switch (re.charAt(i)) {
-
-            }
-        }
-
-        return null;
-    }
-
+public class NFATransform {
     /**
      * 具体算法请参考龙书第二版3.7.4
      * 这里的状态表示和龙书里的略有差别，{@link NFA}
@@ -28,6 +18,14 @@ public class MyTransform {
      *     ε     ε
      */
     public static NFA NFAOrNFA(NFA n1, NFA n2) {
+        if (n1 == NFA.EMPTY_NFA) {
+            return n2;
+        }
+
+        if (n2 == NFA.EMPTY_NFA) {
+            return n1;
+        }
+
         NFA nfa = new NFA(1 + (n1.getStateCount() - 1) + (n2.getStateCount() - 1) + 1 + 1);
 
         // 构造i movetable
@@ -57,6 +55,14 @@ public class MyTransform {
      * -> n1(不包含终态) -> (不包含始态)n2 ->
      */
     public static NFA NFAUnionNFA(NFA n1, NFA n2) {
+        if (n1 == NFA.EMPTY_NFA) {
+            return n2;
+        }
+
+        if (n2 == NFA.EMPTY_NFA) {
+            return n1;
+        }
+
         NFA nfa = new NFA(n1.getStateCount() - 1 + (n2.getStateCount() - 1));
         nfa.addNFA(0, n1, 0, n1.getStateCount() - 2, 0);
         nfa.removeAnyOther(n1.getStateCount() - 2);
@@ -74,6 +80,10 @@ public class MyTransform {
      * 具体算法请参考龙书第二版3.7.4
      */
     public static NFA NFAStar(NFA n) {
+        if (n == NFA.EMPTY_NFA) {
+            return n;
+        }
+
         NFA nfa = new NFA(1 + n.getStateCount() + 1);
 
         nfa.addMoveTableEntry(0, NFA.EMPTY_INPUT, 1);
