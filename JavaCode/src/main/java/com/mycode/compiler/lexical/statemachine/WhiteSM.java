@@ -1,16 +1,26 @@
 package com.mycode.compiler.lexical.statemachine;
 
+import com.mycode.compiler.Defines;
+import com.mycode.compiler.lexical.Token;
+
 /**
+ * 空格
+ *
  * @author jiangzhen
  */
-public class WhiteStateMachine extends StateMachine
+public class WhiteSM extends StateMachine
 {
-	public WhiteStateMachine() {
-		super(Defines.TokenType.WHITE);
+	public WhiteSM() {
+		super(new Token(Defines.TokenType.WHITE));
 	}
 
 	@Override
-	protected int getNextState(int state, byte ch)
+	public boolean accept() {
+		return state == 2;
+	}
+
+	@Override
+	protected int moveToNextState(byte ch)
 	{
 		switch (state) {
 			case 0:
@@ -29,8 +39,7 @@ public class WhiteStateMachine extends StateMachine
 					case '\n':
 						return 1;
 					default:
-						finalState = true;
-						return -1;
+						return 2;
 				}
 			default:
 				return -1;

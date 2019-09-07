@@ -1,154 +1,186 @@
 package com.mycode.compiler.lexical;
 
 import com.mycode.compiler.lexical.statemachine.*;
+
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 词法分析器
  *
  * @author jiangzhen
  */
-public class LexicalAnalyzer
-{
-	private static final int BUFFER_SIZE = 1024;
-	private static final int BUFFER_NUMBER = 2;
-	private static final int BUFFER_TOTAL_SIZE = BUFFER_SIZE * BUFFER_NUMBER;
-	private static final int EOF = -1;
+public class LexicalAnalyzer {
+    /**
+     * 一个缓冲区的大小
+     */
+    private static final int BUFFER_SIZE = 1024;
 
-	private InputStream inputStream;
-	private byte[] buffer = new byte[BUFFER_TOTAL_SIZE];
-	private int begin;
-	private int forward;
+    /**
+     * 缓冲区数量
+     */
+    private static final int BUFFER_COUNT = 2;
 
-	private StateMachine[] stateMachines = {
-		new IfStateMachine(), new ElseStateMachine(), new IdStateMachine(), new RelopStateMachine(),
-		new WhiteStateMachine(), new DigitStateMachine()
-	};
+    /**
+     * 缓冲区总大小
+     */
+    private static final int BUFFER_TOTAL_SIZE = BUFFER_SIZE * BUFFER_COUNT;
 
-	private int[] forwards = new int[stateMachines.length];
-	private int tokenIndex = -1;
+    /**
+     * 表示缓冲区的最后一位
+     */
+    private static final int EOF = -1;
 
-	private List<Integer> noFinishStateMachineList = new ArrayList<>();
+    /**
+     * 输入字符流，可能是一个文件或者一个字符串
+     */
+    private InputStream inputStream;
 
-	public void init(InputStream inputStream) {
-		this.begin = 0;
-		this.forward = 0;
-		this.inputStream = inputStream;
+    /**
+     * 缓冲区
+     * |<-       BUFFER_SIZE(LEFT)    -> <-      BUFFER_SIZE(RIGHT)     ->
+     * +--------------------------------+--------------------------------+
+     * |                                |                      EOF(1byte)|
+     * +--------------------------------+--------------------------------+
+     */
+    private byte[] buffer = new byte[BUFFER_TOTAL_SIZE];
 
-		try
-		{
-			if (inputStream.available() <= 0) {
-				throw new IllegalArgumentException("InputStream length is not > 0");
-			}
+    /**
+     * 本次解析的开始位置
+     */
+    private int begin;
 
-			int readLength = inputStream.read(buffer,0, BUFFER_TOTAL_SIZE - 1);
-			buffer[readLength] = EOF;
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-	}
+    /**
+     * 前向指针
+     */
+    private int forward;
 
-	public Token parseToken() throws IOException {
-		reset();
+    /**
+     * 定义过的状态机
+     */
+    private StateMachine[] stateMachines = {
+            new IfSM(), new WhileSM(), new IdSM(), new RelopSM(),
+            new WhiteSM(), new DigitSM()
+    };
 
-		byte nextCh;
-		do {
-			nextCh = getNextCh();
-			moveAllStateMachine(nextCh);
-			if (noFinishStateMachineList.isEmpty()) {
-				setTokenIndex();
-				forward = forwards[tokenIndex];
-				return buildToken();
-			}
-		} while (nextCh != EOF);
+    public void init(InputStream inputStream) {
+        this.begin = 0;
+        this.forward = 0;
+        this.inputStream = inputStream;
 
-		return null;
-	}
+        try {
+            if (inputStream.available() <= 0) {
+                throw new IllegalArgumentException("InputStream length is not > 0");
+            }
 
-	private void moveAllStateMachine(byte ch) {
-		for (int i = 0; i < noFinishStateMachineList.size(); ++i) {
-			StateMachine stateMachine = stateMachines[noFinishStateMachineList.get(i)];
-			stateMachine.move(ch);
-			if (stateMachine.getState() == -1) {
-				if (stateMachine.isFinalState()) {
-					int stateMachineIndex = noFinishStateMachineList.get(i);
-					forwards[stateMachineIndex] = (stateMachine.isCharAccept() ? forward : forward - 1);
-				}
+            int readLength = inputStream.read(buffer, 0, BUFFER_TOTAL_SIZE - 1);
+            buffer[readLength] = EOF;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-				noFinishStateMachineList.remove(i);
-				--i;
-			}
-		}
-	}
+    /**
+     * 解析出一个token
+     */
+    public Token parseToken() throws IOException {
+        // 重置一下状态，以免收到上次计算结果的影响
+        reset();
 
-	private byte getNextCh() throws IOException {
-		if ((forward - begin) > BUFFER_SIZE) {
-			throw new IllegalStateException("lexme length more than BUFFER_SIZE");
-		}
+        byte nextCh;
+        do {
+            nextCh = getNextCh();
 
-		byte ch = buffer[forward++];
-		if (ch == EOF) {
-			// 缓冲区已经处理完，需要读入新的数据
-			if (inputStream.available() > 0) {
-				// 输入流中还有字符没有处理
-				System.arraycopy(buffer, BUFFER_SIZE, buffer, 0, BUFFER_SIZE - 1);
-				int readLength = inputStream.read(buffer, BUFFER_SIZE - 1, BUFFER_SIZE);
-				buffer[BUFFER_SIZE - 1 + readLength] = EOF;
+            // 输入一个字符，移动所有的状态机状态
+            moveAllStateMachine(nextCh);
+            if (allStateMachineFinish()) {
+                // 所有的状态机都已经结束
+                // 因为接受的状态机不止一个，所以需要选取一个作为最终结果
+                StateMachine sm = peekFinalSM();
+                if (sm == null) {
+                    // 所有的状态机都已经结束，但是没有状态机接受，非法字符串，编译出错
+                    throw new IllegalStateException("Illegal string");
+                }
 
-				// begin和forwar不会相差BUFFER_SIZE
-				begin -= BUFFER_SIZE;
-				forward -= BUFFER_SIZE;
-			} else {
-				// 输入流中没有字符了
-				return EOF;
-			}
-		}
+                // 设置下一个token的搜索起点
+                forward -= 1;
+                begin = forward;
+                return sm.getToken();
+            }
+        } while (nextCh != EOF);
 
-		return ch;
-	}
+        return null;
+    }
 
-	private void setTokenIndex() {
-		// 取最前面的token
-		for (int i = 0; i < stateMachines.length; ++i) {
-			StateMachine stateMachine = stateMachines[i];
-			if (stateMachine.isFinalState()) {
-				tokenIndex = i;
-				return;
-			}
-		}
-	}
+    private boolean allStateMachineFinish() {
+        int count = 0;
+        for (StateMachine stateMachine : stateMachines) {
+            if (stateMachine.fail() || stateMachine.accept()) {
+                ++count;
+            }
+        }
 
-	private Token buildToken() {
-		if (tokenIndex < 0) {
-			return null;
-		}
+        return count == stateMachines.length;
+    }
 
-		// 取最前面的token
-		StateMachine stateMachine = stateMachines[tokenIndex];
-		Defines.TokenType stateType = stateMachine.getType();
-		// TODO 符号表还未设置
-		Token token = new Token(stateType, new String(buffer, begin, forward - begin), 0);
-		begin = forward;
-		return token;
-	}
+    private void moveAllStateMachine(byte ch) {
+        for (StateMachine stateMachine : stateMachines) {
+            if (!stateMachine.fail()) {
+                stateMachine.move(ch);
+            }
+        }
+    }
 
-	/**
-	 * 重新设置状态及状态
-	 */
-	private void reset() {
-		for (int i = 0; i < stateMachines.length; ++i) {
-			stateMachines[i].reset();
-			forwards[i] = 0;
-		}
+    private byte getNextCh() throws IOException {
+        if ((forward - begin) > BUFFER_SIZE) {
+            throw new IllegalStateException("lexme length more than BUFFER_SIZE");
+        }
 
-		tokenIndex = -1;
-		for (int i = 0; i < stateMachines.length; ++i) {
-			noFinishStateMachineList.add(i);
-		}
-	}
+        byte ch = buffer[forward++];
+        if (ch == EOF) {
+            // 缓冲区已经处理完，需要读入新的数据
+            if (inputStream.available() > 0) {
+                // 输入流中还有字符没有处理
+                // 把right的数据复制到left
+                System.arraycopy(buffer, BUFFER_SIZE, buffer, 0, BUFFER_SIZE - 1);
+
+                // 把新数据读到right,最后一位设置为EOF
+                int readLength = inputStream.read(buffer, BUFFER_SIZE - 1, BUFFER_SIZE);
+                buffer[BUFFER_SIZE - 1 + readLength] = EOF;
+
+                // 更新begin和forwar
+                // begin和forward不会相差BUFFER_SIZE
+                begin -= BUFFER_SIZE;
+                forward -= BUFFER_SIZE;
+            } else {
+                // 输入流中没有字符了
+                return EOF;
+            }
+        }
+
+        return ch;
+    }
+
+    /**
+     * 从所有的状态机中选取出最终结果
+     * 定义的状态机数组中已经按照优先级排列了，所以找到的第一个状态机就是最终结果
+     */
+    private StateMachine peekFinalSM() {
+        for (StateMachine stateMachine : stateMachines) {
+            if (stateMachine.accept()) {
+                return stateMachine;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * 重新设置状态
+     */
+    private void reset() {
+        for (StateMachine stateMachine : stateMachines) {
+            stateMachine.reset();
+        }
+    }
 }

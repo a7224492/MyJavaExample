@@ -1,16 +1,28 @@
 package com.mycode.compiler.lexical.statemachine;
 
+import com.mycode.compiler.Defines;
+import com.mycode.compiler.lexical.Token;
+
+import static com.mycode.compiler.Defines.isNumber;
+
 /**
+ * 数字
+ *
  * @author jiangzhen
  */
-public class DigitStateMachine extends StateMachine
+public class DigitSM extends StateMachine
 {
-	public DigitStateMachine() {
-		super(Defines.TokenType.DIGIT);
+	public DigitSM() {
+		super(new Token(Defines.TokenType.DIGIT));
 	}
 
 	@Override
-	protected int getNextState(int state, byte ch)
+	public boolean accept() {
+		return state == 7;
+	}
+
+	@Override
+	protected int moveToNextState(byte ch)
 	{
 		switch (state) {
 			case 0:
@@ -25,27 +37,17 @@ public class DigitStateMachine extends StateMachine
 				} else if (ch == '.') {
 					return 2;
 				} else if (ch == 'E') {
-					return 4;
+					return 3;
 				} else {
-					finalState = true;
-					return -1;
+					return 7;
 				}
 			case 2:
 				if (isNumber(ch)) {
-					return 3;
+					return 4;
 				} else {
 					return -1;
 				}
 			case 3:
-				if (isNumber(ch)) {
-					return 3;
-				} else if (ch == 'E') {
-					return 4;
-				} else {
-					finalState = true;
-					return -1;
-				}
-			case 4:
 				if (ch == '+' || ch == '-') {
 					return 5;
 				} else if (isNumber(ch)) {
@@ -53,14 +55,21 @@ public class DigitStateMachine extends StateMachine
 				} else {
 					return -1;
 				}
+			case 4:
+				if (isNumber(ch)) {
+					return 4;
+				} else if (ch == 'E') {
+					return 3;
+				} else {
+					return 7;
+				}
 			case 5:
 				return isNumber(ch) ? 6 : -1;
 			case 6:
 				if (isNumber(ch)) {
 					return 6;
 				} else {
-					finalState = true;
-					return -1;
+					return 7;
 				}
 			default:
 				return -1;

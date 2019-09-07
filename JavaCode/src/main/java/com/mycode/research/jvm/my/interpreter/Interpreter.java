@@ -38,10 +38,10 @@ public class Interpreter {
             case INVOKESPECIAL:
             case INVOKESTATIC:
                 // 1. 得到当前所在类的常量池
-                index = interpreterCode.parseOperand();
                 JConstantPool constantPool = currentFrame.getCurrentMethod().getConstantPool();
 
                 // 2. 得到方法名
+                index = interpreterCode.parseOperand();
                 MethodRef methodRef = (MethodRef) constantPool.getConstantPoolEntry(index);
                 short classNameIndex = (short) constantPool.getConstantPoolEntry(methodRef.getClassIndex());
                 String className = (String) constantPool.getConstantPoolEntry(classNameIndex);
@@ -108,19 +108,15 @@ public class Interpreter {
                 break;
             case ILOAD0:
                 index = 0;
-                currentFrame.getOperandStack().push(currentFrame.getLocalTable().get(index));
                 break;
             case ILOAD1:
                 index = 1;
-                currentFrame.getOperandStack().push(currentFrame.getLocalTable().get(index));
                 break;
             case ILOAD2:
                 index = 2;
-                currentFrame.getOperandStack().push(currentFrame.getLocalTable().get(index));
                 break;
             case ILOAD3:
                 index = 3;
-                currentFrame.getOperandStack().push(currentFrame.getLocalTable().get(index));
                 break;
             case IRETURN:
             case RETURN:
@@ -140,6 +136,12 @@ public class Interpreter {
         }
 
         switch (interpreterCode.getCode()) {
+            case ILOAD0:
+            case ILOAD1:
+            case ILOAD2:
+            case ILOAD3:
+                currentFrame.getOperandStack().push(currentFrame.getLocalTable().get(index));
+                break;
             case ISTORE1:
             case ISTORE2:
             case ISTORE3:

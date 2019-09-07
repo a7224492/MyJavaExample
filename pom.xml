@@ -6,11 +6,13 @@
 
     <groupId>com.mycode</groupId>
     <artifactId>KodgamesTool</artifactId>
+    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
 
     <modules>
 <!--        <module>MyTestClient</module>-->
         <module>JavaCode</module>
+        <module>SpringStudy</module>
     </modules>
 
     <!--<dependencies>-->
