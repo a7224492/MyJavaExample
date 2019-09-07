@@ -12,9 +12,9 @@ import java.lang.reflect.Method;
  * @date 2019/5/27 20:43
  */
 public class JvmTest {
-    public static void main(String[] args)
+        public static void main(String[] args)
         throws IOException, ClassNotFoundException
-    {
+        {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         Student stu = new Student("chuangwang", 25, "WuDa");
         Programer programer = new Programer("jiangzhen", 25, "loho");

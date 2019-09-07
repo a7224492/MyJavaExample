@@ -1,5 +1,5 @@
 # 1 "keyboard2.S"
-# 1 "/mnt/hgfs/vm_share/KodgamesTool/oslab/linux-0.11/kernel/chr_drv//"
+# 1 "/home/jz/oslab/linux-0.11/kernel/chr_drv//"
 # 1 "<built-in>"
 # 1 "<command line>"
 # 1 "keyboard2.S"
@@ -249,12 +249,13 @@ func:
 	subb $0x3B,%al
 	jb end_func
 	cmpb $9,%al
-	jbe ok_func
+	jbe end_func
 	subb $18,%al
 	cmpb $10,%al
 	jb end_func
 	cmpb $11,%al
 	ja end_func
+
 ok_func:
 	cmpl $4,%ecx		
 	jl end_func
@@ -272,7 +273,7 @@ func_table:
 	.long 0x455b5b1b,0x465b5b1b,0x475b5b1b,0x485b5b1b
 	.long 0x495b5b1b,0x4a5b5b1b,0x4b5b5b1b,0x4c5b5b1b
 
-# 294 "keyboard2.S"
+# 295 "keyboard2.S"
 
 key_map:
 	.byte 0,27
@@ -323,7 +324,7 @@ alt_map:
 	.byte '|
 	.fill 10,1,0
 
-# 449 "keyboard2.S"
+# 450 "keyboard2.S"
 
 
 

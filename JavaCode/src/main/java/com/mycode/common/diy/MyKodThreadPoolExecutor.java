@@ -1,16 +1,5 @@
 package com.mycode.common.diy;
 
-//import com.kodgames.core.threadPool.ModuleThreadFactory;
-//import com.kodgames.core.threadPool.task.Task;
-//import com.kodgames.core.threadPool.task.TaskQueue;
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
-//
-//import java.util.concurrent.BlockingQueue;
-//import java.util.concurrent.RejectedExecutionException;
-//import java.util.concurrent.ThreadPoolExecutor;
-//import java.util.concurrent.TimeUnit;
-
 /**
  * @author jiangzhen
  * @date 2019/5/7 12:43

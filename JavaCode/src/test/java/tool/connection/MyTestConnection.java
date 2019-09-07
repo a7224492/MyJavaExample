@@ -1,11 +1,5 @@
 package tool.connection;
 
-//import com.google.protobuf.GeneratedMessage;
-//import com.kodgames.corgi.core.net.Connection;
-//import com.kodgames.corgi.core.net.common.NettyNode;
-//
-//import java.util.ArrayList;
-//import java.util.List;
 
 /**
  * 用来作单元测试的connection

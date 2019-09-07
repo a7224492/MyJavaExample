@@ -6,7 +6,7 @@ package com.mycode.research.jvm;
  */
 public class TestMethod {
     static {
-        System.out.println("TestMethod");
+        System.out.println("TestMain");
     }
 
     public static int addNumber(int x) {
@@ -19,6 +19,9 @@ public class TestMethod {
         {
             case "finish":
                 return true;
+            case "name":
+                System.out.println("jiangzhen");
+                return false;
             default:
                 try {
                     int value = Integer.valueOf(line);
@@ -30,8 +33,7 @@ public class TestMethod {
         }
     }
 
-    public int newTest(int x)
-    {
-        return x * 10;
+    public static void test2() {
+        System.out.println("This is test2");
     }
 }

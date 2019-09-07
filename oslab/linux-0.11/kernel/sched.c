@@ -23,15 +23,17 @@
 #define _S(nr) (1<<((nr)-1))
 #define _BLOCKABLE (~(_S(SIGKILL) | _S(SIGSTOP)))
 
+int mask_display = 0;
+
 void show_task(int nr,struct task_struct * p)
 {
 	int i,j = 4096-sizeof(struct task_struct);
 
-	printk("%d: pid=%d, state=%d, ",nr,p->pid,p->state);
+	/*printk("%d: pid=%d, state=%d, ",nr,p->pid,p->state);*/
 	i=0;
 	while (i<j && !((char *)(p+1))[i])
 		i++;
-	printk("%d (of %d) chars free in kernel stack\n\r",i,j);
+	/*printk("%d (of %d) chars free in kernel stack\n\r",i,j);*/
 }
 
 void show_stat(void)
@@ -41,6 +43,8 @@ void show_stat(void)
 	for (i=0;i<NR_TASKS;i++)
 		if (task[i])
 			show_task(i,task[i]);
+
+    mask_display = !mask_display;
 }
 
 #define LATCH (1193180/HZ)
@@ -49,7 +53,6 @@ extern void mem_use(void);
 
 extern int timer_interrupt(void);
 extern int system_call(void);
-extern int switch_to(struct task_struct *pnext, unsigned long next_ldt);
 
 union task_union {
 	struct task_struct task;
@@ -61,7 +64,6 @@ static union task_union init_task = {INIT_TASK,};
 long volatile jiffies=0;
 long startup_time=0;
 struct task_struct *current = &(init_task.task);
-struct tss_struct *tss = &(init_task.task.tss);
 struct task_struct *last_task_used_math = NULL;
 
 struct task_struct * task[NR_TASKS] = {&(init_task.task), };
@@ -107,7 +109,6 @@ void schedule(void)
 {
 	int i,next,c;
 	struct task_struct ** p;
-	struct task_struct *pnext;
 
 /* check alarm, wake up any interruptible tasks that have got a signal */
 
@@ -129,15 +130,11 @@ void schedule(void)
 		next = 0;
 		i = NR_TASKS;
 		p = &task[NR_TASKS];
-		pnext = task[0];
 		while (--i) {
 			if (!*--p)
 				continue;
-			if ((*p)->state == TASK_RUNNING && (*p)->counter > c) {
-                c = (*p)->counter;
-                next = i;
-                pnext = *p;
-			}
+			if ((*p)->state == TASK_RUNNING && (*p)->counter > c)
+				c = (*p)->counter, next = i;
 		}
 		if (c) break;
 		for(p = &LAST_TASK ; p > &FIRST_TASK ; --p)
@@ -145,9 +142,7 @@ void schedule(void)
 				(*p)->counter = ((*p)->counter >> 1) +
 						(*p)->priority;
 	}
-
-	switch_to(pnext, _LDT(next));
-//    switch_to(next);
+	switch_to(next);
 }
 
 int sys_pause(void)

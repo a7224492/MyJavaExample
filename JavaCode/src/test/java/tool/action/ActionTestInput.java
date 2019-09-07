@@ -1,9 +1,5 @@
 package tool.action;
 
-//import com.google.protobuf.GeneratedMessage;
-//import com.kodgames.corgi.core.service.PublicService;
-//import tool.connection.MyTestConnection;
-
 /**
  * @author jiangzhen
  * @date 2019/4/11 17:58

@@ -1,5 +1,5 @@
 /*
- *  linux/kernel/keyboard.S
+ *  linux/kernel/keyboard2.S
  *
  *  (C) 1991  Linus Torvalds
  */
@@ -218,12 +218,13 @@ func:
 	subb $0x3B,%al
 	jb end_func
 	cmpb $9,%al
-	jbe ok_func
+	jbe end_func
 	subb $18,%al
 	cmpb $10,%al
 	jb end_func
 	cmpb $11,%al
 	ja end_func
+
 ok_func:
 	cmpl $4,%ecx		/* check that there is enough room */
 	jl end_func

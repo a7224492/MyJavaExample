@@ -1,16 +1,10 @@
 package com.mycode.common.diy;
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.TimeUnit;
-
 /**
  * @author jiangzhen
  * @date 2019/5/7 12:42
  */
-public class MyOrderedThreadPoolExecutor extends MyKodThreadPoolExecutor {
-    public MyOrderedThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, BlockingQueue<Runnable> workQueue, String threadGroupName) {
-//        super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, threadGroupName);
-    }
+public class MyOrderedThreadPoolExecutor{
 //    private MyPoolBossThread boss;
 //
 //    public MyOrderedThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, String threadGroupName) {

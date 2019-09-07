@@ -1,7 +1,6 @@
 package com.mycode.research.jvm.agent;
 
 import com.sun.tools.attach.*;
-
 import java.io.IOException;
 import java.util.List;
 
@@ -17,7 +16,7 @@ public class JVMTIThread
 		for (VirtualMachineDescriptor vmd : list) {
 			if (vmd.displayName().endsWith("com.mycode.research.jvm.JvmTest")) {
 				VirtualMachine virtualMachine = VirtualMachine.attach(vmd.id());
-				virtualMachine.loadAgent("C:\\Users\\jz\\Desktop\\KodgamesTool\\JavaCode\\target\\JavaCode-1.0-SNAPSHOT.jar", "cxs");
+				virtualMachine.loadAgent(args[0], "cxs");
 				System.out.println("ok");
 				virtualMachine.detach();
 			}

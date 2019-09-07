@@ -18,6 +18,5 @@ public class MiniBuildTool
 
 		// 修改game.json超时时间
 
-		// res打包
 	}
 }
