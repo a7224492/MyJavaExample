@@ -14,6 +14,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
         <JAVA_HOME>G:\JAVA_8</JAVA_HOME>
+        <MY_LIB>${basedir}/lib</MY_LIB>
     </properties>
 
     <dependencies>
@@ -89,7 +90,7 @@
             <artifactId>jdk.tools</artifactId>
             <scope>system</scope>
             <version>1.8</version>
-            <systemPath>${JAVA_HOME}/lib/tools.jar</systemPath>
+            <systemPath>${MY_LIB}/tools.jar</systemPath>
         </dependency>
 
         <dependency>
@@ -97,15 +98,23 @@
             <artifactId>jdk.tools</artifactId>
             <scope>system</scope>
             <version>1.8</version>
-            <systemPath>${JAVA_HOME}/lib/sa-jdi.jar</systemPath>
+            <systemPath>${MY_LIB}/sa-jdi.jar</systemPath>
         </dependency>
 
         <dependency>
             <groupId>com.kodgames</groupId>
-            <artifactId>BattleServer</artifactId>
-            <version>quanguo-1.2.11</version>
+            <artifactId>BattleCore</artifactId>
+            <scope>system</scope>
+            <version>quanguo-1.1.15</version>
+            <systemPath>C:/Users/jz/Desktop/KodgamesTool/lib/BattleCore-quanguo-1.1.15.jar</systemPath>
         </dependency>
 
+        <dependency>
+            <groupId>com.kodgames</groupId>
+            <artifactId>jpcap</artifactId>
+            <scope>system</scope>
+            <systemPath>${MY_LIB}/jpcap.jar</systemPath>
+        </dependency>
     </dependencies>
 
     <build>
