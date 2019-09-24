@@ -1,3 +1,10 @@
+###netty定义
+- 就是对java nio封装的一个库
+###netty作用
+- 提供了一个现成的线程池模型，提供了一些现成的应用层协议栈代码
+
+
+###关于netty线程池的一些问题
 - 一个端口对应一个channel，一个channel只能对应一个NioEventLoop，也就是说，绑定一个端口只用到1个NioEventLoop，游戏服务器中好像设置了多余的情况
     - interface
 - 为什么一个channel只能对应一个NioEventLoop?也就是说，为什么一个channel只能对应一个selector?

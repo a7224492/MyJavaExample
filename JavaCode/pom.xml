@@ -106,6 +106,12 @@
             <version>quanguo-1.2.11</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.kodgames</groupId>
+            <artifactId>GameServer</artifactId>
+            <version>3.0.2-league.2</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -154,8 +160,8 @@
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <manifestEntries>
-                                        <Premain-Class>com.mycode.research.jvm.agent.AgentTest</Premain-Class>
-                                        <Agent-Class>com.mycode.research.jvm.agent.AgentTest</Agent-Class>
+                                        <Premain-Class>com.mycode.research.jvm.agent.com.mycode.research.agent.AgentTest</Premain-Class>
+                                        <Agent-Class>com.mycode.research.jvm.agent.com.mycode.research.agent.AgentTest</Agent-Class>
                                         <Can-Retransform-Classes>true</Can-Retransform-Classes>
                                     </manifestEntries>
                                 </transformer>
