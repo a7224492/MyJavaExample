@@ -24,7 +24,7 @@ public class SystemDictionaryTest extends Tool
 
 		SystemDictionaryTest test = new SystemDictionaryTest();
 		String[] newArgs = {"22012"};
-		test.execute(newArgs);
+//		test.execute(newArgs);
 	}
 
 	@Override

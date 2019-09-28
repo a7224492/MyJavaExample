@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Class-Path: jpcap.jar sa-jdi.jar tools.jar
+Main-Class: 
+
