@@ -9,9 +9,8 @@ import java.io.InputStreamReader;
  * @date 2019/5/27 20:43
  */
 public class JvmTest {
-        public static void main(String[] args)
-        throws IOException, ClassNotFoundException
-        {
+    public static void main(String[] args)
+            throws IOException, ClassNotFoundException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         Student stu = new Student("chuangwang", 25, "WuDa");
         Programer programer = new Programer("jiangzhen", 25, "loho");
@@ -19,6 +18,8 @@ public class JvmTest {
         boolean isFinish = false;
         while (!isFinish) {
             String line = br.readLine();
+
+            test(1,22,33);
 
             try {
                 if (line.equals("load")) {
@@ -32,5 +33,9 @@ public class JvmTest {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static void test(int x, int y, int z) {
+        System.out.println(Integer.valueOf(x));
     }
 }

@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
-Class-Path: jpcap.jar sa-jdi.jar tools.jar
-Main-Class: 
+Class-Path: asm-6.2.1.jar asm-analysis-6.2.1.jar asm-commons-6.2.1.jar asm-tree-6.2.1.jar
+Premain-Class: com.agent.StepSaveAgent
+Agent-Class: com.agent.StepSaveAgent
 

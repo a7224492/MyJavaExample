@@ -13,7 +13,7 @@ import java.security.ProtectionDomain;
  * @author jiangzhen
  * @date 2019/9/24 20:08
  */
-public class StepSaveAgent {
+public class TimeCountAgent {
     public static void premain(String agentArgs, Instrumentation inst) {
         System.out.println("--------premain------------");
         inst.addTransformer(new ClassFileTransformer() {

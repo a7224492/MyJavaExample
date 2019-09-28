@@ -1,7 +1,5 @@
 package com.mycode.research.multithread;
 
-import org.apache.kafka.common.metrics.stats.Count;
-
 import java.util.concurrent.CountDownLatch;
 
 /**

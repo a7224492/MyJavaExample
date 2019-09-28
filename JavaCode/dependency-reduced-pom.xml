@@ -44,8 +44,8 @@
               <transformers>
                 <transformer>
                   <manifestEntries>
-                    <Premain-Class>com.mycode.research.jvm.agent.com.mycode.research.agent.AgentTest</Premain-Class>
-                    <Agent-Class>com.mycode.research.jvm.agent.com.mycode.research.agent.AgentTest</Agent-Class>
+                    <Premain-Class>com.mycode.research.jvm.agent.com.agent.AgentTest</Premain-Class>
+                    <Agent-Class>com.mycode.research.jvm.agent.com.agent.AgentTest</Agent-Class>
                     <Can-Retransform-Classes>true</Can-Retransform-Classes>
                   </manifestEntries>
                 </transformer>

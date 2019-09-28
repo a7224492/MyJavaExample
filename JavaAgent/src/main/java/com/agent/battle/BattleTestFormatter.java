@@ -1,5 +1,10 @@
 package com.agent.battle;
 
+import com.kodgames.battlecore.service.battle.common.xbean.Step;
+import com.kodgames.battleserver.service.battle.constant.MahjongConstant;
+import com.kodgames.battleserver.service.battle.region.guizhou.common.Rules_GuiZhou;
+import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,10 +14,53 @@ import java.util.Map;
  */
 public class BattleTestFormatter
 {
-	private static Map<Integer, String> ruleValue2Name = new HashMap<>();
+	private static Map<Integer, String> roomSize2String = new HashMap<>();
+
+	private static Map<Integer, String> rule2Name = new HashMap<>();
+	private static Map<Integer, String> playType2Name = new HashMap<>();
+	private static List<String> playerNameList = Arrays.asList("FIRST", "SECOND", "THIRD", "FORTH");
 
 	static {
-		Rules_GuiZhou
+		roomSize2String.put(2, "ER_ID_LIST");
+		roomSize2String.put(3, "SAN_ID_LIST");
+		roomSize2String.put(4, "SI_ID_LIST");
+
+		for (Field declaredField : Rules_GuiZhou.class.getDeclaredFields())
+		{
+			try
+			{
+				declaredField.setAccessible(true);
+				Object o = declaredField.get(Rules_GuiZhou.class);
+				if (o instanceof Integer) {
+					int value = (int) o;
+					String name = declaredField.getName();
+					rule2Name.put(value, name);
+				}
+			}
+			catch (IllegalAccessException e)
+			{
+				e.printStackTrace();
+			}
+		}
+
+		for (Field declaredField : MahjongConstant.PlayType.class.getDeclaredFields())
+		{
+			try
+			{
+				declaredField.setAccessible(true);
+				Object o = declaredField.get(MahjongConstant.PlayType.class);
+				if (o instanceof Integer) {
+					int value = (int) o;
+					String name = declaredField.getName();
+
+					playType2Name.put(value, name);
+				}
+			}
+			catch (IllegalAccessException e)
+			{
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public static final String FORMATTER = "" +
@@ -67,26 +115,60 @@ public class BattleTestFormatter
 
 	public static String formatRoomRules(List<Integer> rules) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("List<Integer> rules = Arrays.asList(\n");
-		for (Integer rule : rules) {
+		sb.append("// 房间规则\n").append("List<Integer> rules = Arrays.asList(\n");
 
+		for (int i = 0; i < rules.size(); ++i) {
+			int rule = rules.get(i);
+			String name = rule2Name.get(rule);
+			if (name == null) {
+				name = String.valueOf(rule);
+			}
+
+			if (i == rules.size()- 1) {
+				sb.append(name).append("\n");
+			} else {
+				sb.append(name).append(",\n");
+			}
 		}
-		 +
-			"GAME_TYPE_AN_LONG,\n" +
-			"GAME_PLAY_3REN,\n" +
-			"GAME_PLAY_YAOBAI_JI,\n" +
-			"GAME_PLAY_BEN_JI,\n" +
-			"GAME_PLAY_WUGU_JI,\n" +
-			"GAME_PLAY_XINGQI_JI,\n" +
-			"GAME_PLAY_MEN_HU,\n" +
-			"GAME_PLAY_XIAO_HU_BI_MEN,\n" +
-			"GAME_PLAY_LIAN_HU,\n" +
-			"GAME_PLAY_LIANZHUANG,\n" +
-			"GAME_PLAY_FENG_DING_60,\n" +
-			"COMMON_VOICE_CLOSE,\n" +
-			"COMMON_TING_TIPS_OPEN,\n" +
-			"COMMON_TRUSTEESHIP_CLOSE,\n" +
-			"GAME_PLAY_NO_TING_CARD\n" + ");\n"
+
+		sb.append(");\n");
+		return sb.toString();
+	}
+
+	public static String formatCreateRoom(int roomSize) {
+		return "// 创建房间\n" + "createBattleRoom(rules, " + roomSize2String.get(roomSize) + ");\n";
+	}
+
+	public static String formatPlayStep(List<Step> stepList) {
+		// "playStep(SECOND, OPERATE_TING, 0);\n"
+		StringBuilder sb = new StringBuilder();
+		sb.append("// 打牌\n");
+		for (Step step : stepList)
+		{
+			String name = playType2Name.get(step.getPlayType());
+			if (name == null) {
+				name = String.valueOf(step.getPlayType());
+			}
+
+			String playerName = playerNameList.get(step.getRoleId());
+			sb.append("playStep(").append(playerName).append(", ").append(name).append(", ");
+			if (!step.getCards().isEmpty()) {
+				sb.append(step.getCards().get(0));
+			}
+			sb.append(");\n");
+		}
+
+		return sb.toString();
+	}
+
+	public static String formatCheckScore(List<Integer> roleIdList, List<Integer> scoreList) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("// 算分\n");
+		for (int i = 0; i < roleIdList.size(); ++i) {
+			sb.append("checkScore(").append(playerNameList.get(roleIdList.get(i))).append(", ").append(scoreList.get(i)).append(");\n");
+		}
+
+		return sb.toString();
 	}
 
 	public static void main(String[] args) {

@@ -1,19 +1,48 @@
 package com.agent;
 
-import org.objectweb.asm.*;
-import org.objectweb.asm.commons.AnalyzerAdapter;
-import org.objectweb.asm.commons.LocalVariablesSorter;
+import java.util.Arrays;
+import java.util.List;
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.FieldVisitor;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
 
-public class TimeCountAdpter extends ClassVisitor implements Opcodes {
+public class StepSaveAdapter extends ClassVisitor implements Opcodes {
+    static final List<AspectData> ASPECT_DATA_LIST = Arrays.asList(
+        new AspectData(
+            "com/kodgames/battlecore/service/battle/BattleService",
+            "startGame",
+            "(Lcom/kodgames/battlecore/service/battle/common/xbean/BattleRoom;)V",
+            "(Lcom/kodgames/battlecore/service/battle/common/xbean/BattleRoom;)V",
+            new int[] {ALOAD}
+        ),
+        new AspectData(
+            "com/kodgames/battlecore/service/battle/BattleService",
+            "roundFinish",
+            "(IIILcom/kodgames/message/proto/battle/BattleProtoBuf$BCMatchResultSYN;)V",
+            "(IIILcom/kodgames/message/proto/battle/BattleProtoBuf$BCMatchResultSYN;)V",
+            new int[] {ILOAD, ILOAD, ILOAD, ALOAD}
+        ),
+        new AspectData(
+            "com/kodgames/battleserver/service/battle/processer/BattleProcesser",
+            "processStep",
+            "(II[BLjava/util/List;)V",
+            "(II[BLjava/util/List;)Z",
+            new int[] {ILOAD, ILOAD, ALOAD, ALOAD}
+        ),
+        new AspectData(
+            "com/kodgames/battleserver/service/battle/region/guizhou/anlong/processer/TingProcess_AnLong",
+            "processStep",
+            "(II[BLjava/util/List;)V",
+            "(II[BLjava/util/List;)Z",
+            new int[] {ILOAD, ILOAD, ALOAD, ALOAD}
+        )
+    );
+
     private String owner;
     private boolean isInterface;
-    private String filedName="UDASMCN";
-    private int acc=Opcodes.ACC_PUBLIC+Opcodes.ACC_STATIC+Opcodes.ACC_FINAL;
-    private boolean isPresent=false;
 
-    private String methodName;
-
-    public TimeCountAdpter(ClassVisitor classVisitor) {
+    StepSaveAdapter(ClassVisitor classVisitor) {
         super(ASM6, classVisitor);
     }
 
@@ -23,31 +52,35 @@ public class TimeCountAdpter extends ClassVisitor implements Opcodes {
         owner = name;
         isInterface = (access & ACC_INTERFACE) != 0;
     }
+
     @Override
-    public FieldVisitor visitField(int access, String name, String descriptor, String signature, Object value) {
-        if (name.equals(filedName)){
-            isPresent=true;
-        }
-        return super.visitField(access, name, descriptor, signature, value);
-    }
-    @Override
-    public MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
+    public MethodVisitor visitMethod(int access, String name, final String descriptor, String signature, String[] exceptions) {
         MethodVisitor mv = cv.visitMethod(access, name, descriptor, signature, exceptions);
+        for (final AspectData aspectData : ASPECT_DATA_LIST)
+        {
+            if (aspectData.methodName.equals(name) && aspectData.des.equals(descriptor)) {
+                return new MethodVisitor(ASM6, mv) {
+                    @Override
+                    public void visitCode() {
+                        for (int i = 1; i <= aspectData.opCode.length; ++i) {
+                            mv.visitVarInsn(aspectData.opCode[i - 1], i);
+                        }
 
-        if (!isInterface && mv != null && !name.equals("<init>") && !name.equals("<clinit>")) {
-            methodName = name;
-            AddTimerMethodAdapter at = new AddTimerMethodAdapter(mv);
-            at.aa = new AnalyzerAdapter(owner, access, name, descriptor, at);
-            at.lvs = new LocalVariablesSorter(access, descriptor, at.aa);
-
-            return at.lvs;
+                        mv.visitMethodInsn(INVOKESTATIC, "com/agent/battle/SaveStep", aspectData.methodName, aspectData.aspectDes, false);
+                        mv.visitCode();
+                    }
+                };
+            }
         }
 
         return mv;
     }
 
+    @Override
     public void visitEnd() {
         if (!isInterface) {
+            int acc = Opcodes.ACC_PUBLIC + Opcodes.ACC_STATIC + Opcodes.ACC_FINAL;
+            String filedName = "UDASMCN";
             FieldVisitor fv = cv.visitField(acc, filedName,
                     "Ljava/lang/String;", null, owner);
             if (fv != null) {
@@ -56,60 +89,21 @@ public class TimeCountAdpter extends ClassVisitor implements Opcodes {
         }
         cv.visitEnd();
     }
+}
 
-    class AddTimerMethodAdapter extends MethodVisitor {
-        private int time;
-        private int maxStack;
-        public LocalVariablesSorter lvs;
-        public AnalyzerAdapter aa;
+class AspectData {
+    String className;
+    String methodName;
+    String aspectDes;
+    String des;
+    int opCode[];
 
-        public AddTimerMethodAdapter(MethodVisitor methodVisitor) {
-            super(ASM6, methodVisitor);
-        }
-
-
-        @Override
-        public void visitCode() {
-            mv.visitCode();
-            mv.visitMethodInsn(INVOKESTATIC, "java/lang/System", "nanoTime", "()J", false);
-            time=lvs.newLocal(Type.LONG_TYPE);
-            mv.visitVarInsn(LSTORE, time);
-            maxStack=4;
-        }
-
-        @Override
-        public void visitInsn(int opcode) {
-            if (((opcode >= IRETURN && opcode <= RETURN) || opcode == ATHROW) && !isPresent) {
-                mv.visitMethodInsn(INVOKESTATIC, "java/lang/System", "nanoTime", "()J", false);
-                mv.visitVarInsn(LLOAD, time);
-                mv.visitInsn(LSUB);
-                mv.visitVarInsn(LSTORE, time);
-
-                mv.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
-
-                mv.visitTypeInsn(NEW, "java/lang/StringBuilder");
-                mv.visitInsn(DUP);
-                mv.visitMethodInsn(INVOKESPECIAL, "java/lang/StringBuilder", "<init>", "()V", false);
-                mv.visitFieldInsn(GETSTATIC, owner, filedName, "Ljava/lang/String;");
-                mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "append", "(Ljava/lang/String;)Ljava/lang/StringBuilder;", false);
-
-                mv.visitLdcInsn("  "+methodName+":");
-                mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "append", "(Ljava/lang/String;)Ljava/lang/StringBuilder;", false);
-
-                mv.visitVarInsn(LLOAD, time);
-                mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "append", "(J)Ljava/lang/StringBuilder;", false);
-                mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "toString", "()Ljava/lang/String;", false);
-                mv.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false);
-
-                maxStack=Math.max(aa.stack.size()+4,maxStack);
-            }
-            mv.visitInsn(opcode);
-        }
-
-        @Override
-        public void visitMaxs(int maxStack, int maxLocals) {
-            super.visitMaxs(Math.max(maxStack,this.maxStack), maxLocals);
-        }
+    public AspectData(String className, String methodName, String aspectDes, String des, int[] opCode)
+    {
+        this.className = className;
+        this.methodName = methodName;
+        this.aspectDes = aspectDes;
+        this.des = des;
+        this.opCode = opCode;
     }
-
 }

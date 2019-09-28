@@ -9,17 +9,25 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
 
+    <properties>
+        <MY_LIB>${basedir}/lib</MY_LIB>
+    </properties>
+
     <modules>
-<!--        <module>MyTestClient</module>-->
+        <!--        <module>MyTestClient</module>-->
         <module>JavaCode</module>
         <module>SpringStudy</module>
+        <module>JavaAgent</module>
     </modules>
 
+    <dependencies>
+    </dependencies>
+
     <!--<dependencies>-->
-        <!--<dependency>-->
-            <!--<groupId>com.kodgames</groupId>-->
-            <!--<artifactId>BattleServer</artifactId>-->
-            <!--<version>quanguo-1.1.11</version>-->
-        <!--</dependency>-->
+    <!--<dependency>-->
+    <!--<groupId>com.kodgames</groupId>-->
+    <!--<artifactId>BattleServer</artifactId>-->
+    <!--<version>quanguo-1.1.11</version>-->
+    <!--</dependency>-->
     <!--</dependencies>-->
 </project>

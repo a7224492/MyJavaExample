@@ -4,7 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.mycode</groupId>
+    <parent>
+        <artifactId>KodgamesTool</artifactId>
+        <groupId>com.mycode</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
     <artifactId>JavaCode</artifactId>
     <version>1.0</version>
 
@@ -13,8 +18,6 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
-        <JAVA_HOME>G:\JAVA_8</JAVA_HOME>
-        <MY_LIB>${basedir}/lib</MY_LIB>
     </properties>
 
     <dependencies>
@@ -85,36 +88,28 @@
             <version>7.7.10</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.ow2.asm/asm -->
         <dependency>
-            <groupId>jdk.tools</groupId>
-            <artifactId>jdk.tools</artifactId>
-            <scope>system</scope>
-            <version>1.8</version>
-            <systemPath>${MY_LIB}/tools.jar</systemPath>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm</artifactId>
+            <version>6.2.1</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.ow2.asm/asm-commons -->
         <dependency>
-            <groupId>jdk.tools</groupId>
-            <artifactId>jdk.tools</artifactId>
-            <scope>system</scope>
-            <version>1.8</version>
-            <systemPath>${MY_LIB}/sa-jdi.jar</systemPath>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm-commons</artifactId>
+            <version>6.2.1</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.kodgames</groupId>
-            <artifactId>BattleCore</artifactId>
-            <scope>system</scope>
-            <version>quanguo-1.1.15</version>
-            <systemPath>C:/Users/jz/Desktop/KodgamesTool/lib/BattleCore-quanguo-1.1.15.jar</systemPath>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.kodgames</groupId>-->
+            <!--<artifactId>BattleCore</artifactId>-->
+            <!--<scope>system</scope>-->
+            <!--<version>quanguo-1.1.15</version>-->
+            <!--<systemPath>C:/Users/jz/Desktop/KodgamesTool/lib/BattleCore-quanguo-1.1.15.jar</systemPath>-->
+        <!--</dependency>-->
 
-        <dependency>
-            <groupId>com.kodgames</groupId>
-            <artifactId>jpcap</artifactId>
-            <scope>system</scope>
-            <systemPath>${MY_LIB}/jpcap.jar</systemPath>
-        </dependency>
     </dependencies>
 
     <build>
@@ -163,8 +158,8 @@
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <manifestEntries>
-                                        <Premain-Class>com.mycode.research.jvm.agent.com.mycode.research.agent.AgentTest</Premain-Class>
-                                        <Agent-Class>com.mycode.research.jvm.agent.com.mycode.research.agent.AgentTest</Agent-Class>
+                                        <Premain-Class>com.mycode.research.jvm.agent.com.agent.AgentTest</Premain-Class>
+                                        <Agent-Class>com.mycode.research.jvm.agent.com.agent.AgentTest</Agent-Class>
                                         <Can-Retransform-Classes>true</Can-Retransform-Classes>
                                     </manifestEntries>
                                 </transformer>
